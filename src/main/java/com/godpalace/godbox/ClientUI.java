@@ -1,5 +1,6 @@
 package com.godpalace.godbox;
 
+import com.godpalace.godbox.Utils.SettingGroup;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,6 +47,7 @@ public class ClientUI extends JFrame {
 
         //TipLabel
         tipLabel = new JLabel("提示：");
+        tipLabel.setSize(100, 10);
 
         //Add to frame
         this.add(tipLabel, BorderLayout.SOUTH);
@@ -56,5 +58,9 @@ public class ClientUI extends JFrame {
 
     public void setTip(String tip) {
         tipLabel.setText(tip);
+    }
+
+    public void setGUI(SettingGroup settingGroup){
+        setPanel.setGUI(settingGroup);
     }
 }

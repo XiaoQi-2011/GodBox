@@ -21,11 +21,6 @@ public class ModulePanel extends JPanel {
     });
 
     public ModulePanel() {
-        try {
-            ModuleMgr.initialize();
-        } catch (Exception e) {
-            log.error("Error initializing modules", e);
-        }
         init();
     }
 

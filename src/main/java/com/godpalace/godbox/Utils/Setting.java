@@ -13,15 +13,23 @@ public class Setting {
     public String name;
     public String[] values;
 
-    JTextField component0;
-    JTextArea component1;
-    JButton component2;
-    JComboBox<String> component3;
+    JTextField textfield;
+    JTextArea textarea;
+    JButton button;
+    JComboBox<String> combobox;
 
     private final JLabel label;
     @Getter
     private final JPanel panel;
 
+    public Setting(int type, String name, String value) {
+        this.type = type;
+        this.name = name;
+        this.values = new String[]{value};
+        this.label = new JLabel(name + ": ");
+        this.panel = new JPanel();
+        init();
+    }
     public Setting(int type, String name, String[] values) {
         this.type = type;
         this.name = name;
@@ -36,69 +44,67 @@ public class Setting {
         panel.setSize(100, 50);
         panel.setBackground(Color.WHITE);
         panel.add(label);
-        CreateValue();
+        CreateComponent();
     }
 
-    public void CreateValue() {
+    public void CreateComponent() {
         switch (type) {
             case Type.TEXTFIELD: {
-                component0 = new JTextField();
-                component0.setText(values[0]);
-                panel.add(component0);
+                textfield = new JTextField();
+                panel.add(textfield);
                 break;
             }
             case Type.TEXTAREA: {
-                component1 = new JTextArea();
-                component1.setText(values[0]);
-                panel.add(component1);
+                textarea = new JTextArea();
+                panel.add(textarea);
                 break;
             }
             case Type.BUTTON: {
-                component2 = new JButton();
-                component2.setText(values[0]);
-                component2.setToolTipText(values[1]);
-                panel.add(component2);
+                button = new JButton();
+                panel.add(button);
                 break;
             }
             case Type.CHECKBOX: {
-                component3 = new JComboBox<>();
-                for (String value : values) {
-                    component3.addItem(value);
-                }
-                panel.add(component3);
+                combobox = new JComboBox<>();
+                panel.add(combobox);
                 break;
             }
             default:
                 break;
         }
+        setValue(values);
     }
 
     public String getValue() {
         return switch (type) {
-            case Type.TEXTFIELD -> component0.getText();
-            case Type.TEXTAREA -> component1.getText();
-            case Type.BUTTON -> component2.getText();
-            case Type.CHECKBOX -> Objects.toString(component3.getSelectedItem());
+            case Type.TEXTFIELD -> textfield.getText();
+            case Type.TEXTAREA -> textarea.getText();
+            case Type.BUTTON -> button.getText();
+            case Type.CHECKBOX -> Objects.toString(combobox.getSelectedItem());
             default -> "";
         };
     }
 
-    public void setValue(String value) {
+    public void setValue(String[] values) {
         switch (type) {
             case Type.TEXTFIELD: {
-                component0.setText(value);
+                textfield.setText(values[0]);
                 break;
             }
             case Type.TEXTAREA: {
-                component1.setText(value);
+                textarea.setText(values[0]);
                 break;
             }
             case Type.BUTTON: {
-                component2.setText(value);
+                button.setText(values[0]);
+                button.setToolTipText(values[1]);
                 break;
             }
             case Type.CHECKBOX: {
-                component3.setSelectedItem(value);
+                combobox.removeAll();
+                for (String value : values) {
+                    combobox.addItem(value);
+                }
                 break;
             }
             default:
