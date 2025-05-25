@@ -46,7 +46,7 @@ public class ClientUI extends JFrame {
         splitPane.setContinuousLayout(true);
 
         //TipLabel
-        tipLabel = new JLabel("提示：");
+        tipLabel = new JLabel("[提示]：");
         tipLabel.setSize(100, 10);
 
         //Add to frame
@@ -57,10 +57,11 @@ public class ClientUI extends JFrame {
     }
 
     public void setTip(String tip) {
-        tipLabel.setText(tip);
+        tipLabel.setText("[提示]：" + tip);
     }
 
     public void setGUI(SettingGroup settingGroup){
         setPanel.setGUI(settingGroup);
+        SwingUtilities.updateComponentTreeUI(setPanel);
     }
 }

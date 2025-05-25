@@ -26,8 +26,8 @@ public class SetPanel extends JPanel {
     }
 
     public void setGUI(SettingGroup settingGroup){
-        init();
         this.settingGroup = settingGroup;
+        init();
     }
 
 

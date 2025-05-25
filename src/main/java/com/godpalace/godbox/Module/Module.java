@@ -16,4 +16,5 @@ public interface Module {
 
     void Enable();
     void Disable();
+    boolean isEnabled();
 }

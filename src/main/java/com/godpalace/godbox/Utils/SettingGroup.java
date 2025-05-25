@@ -51,9 +51,7 @@ public class SettingGroup {
         panel.setSize(100, settings.size() * 50);
 
         for (Setting setting : settings) {
-            setting.init();
             panel.add(setting.getPanel());
-            panel.add(Box.createRigidArea(new Dimension(0, 10)));
         }
     }
 }

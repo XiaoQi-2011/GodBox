@@ -5,9 +5,9 @@ import com.godpalace.godbox.Module.ModuleUI;
 import com.godpalace.godbox.Utils.Setting;
 import com.godpalace.godbox.Utils.SettingGroup;
 
-public class Test implements Module {
-    private static final int ID = 1;
-    private static final String NAME = "Test";
+public class Test2 implements Module {
+    private static final int ID = 2;
+    private static final String NAME = "Test2";
     private static final String TOOLTIP = "This is a test module.";
     private static ModuleUI UI = null;
     private static boolean on = false;
@@ -15,8 +15,6 @@ public class Test implements Module {
     public static SettingGroup settings = new SettingGroup(new Setting[] {
             new Setting(Setting.Type.TEXTFIELD, "Text", "Hello World!"),
             new Setting(Setting.Type.TEXTAREA, "Text Area", "This is a test text area."),
-            new Setting(Setting.Type.BUTTON, "Button", new String[] {"Click me", "aa"}),
-            new Setting(Setting.Type.CHECKBOX, "Checkbox", new String[] {"On", "Off"})
     });
 
     @Override
@@ -40,7 +38,7 @@ public class Test implements Module {
         return on;
     }
 
-    public Test() {
+    public Test2() {
         UI = new ModuleUI(this);
     }
 
