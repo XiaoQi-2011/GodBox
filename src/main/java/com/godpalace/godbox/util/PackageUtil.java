@@ -1,10 +1,12 @@
-package com.godpalace.godbox.Utils;
+package com.godpalace.godbox.util;
 
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -44,9 +46,9 @@ public final class PackageUtil {
         if (url != null) {
             String type = url.getProtocol();
             if (type.equals("file")) {
-                fileNames = getClassNameByFile(url.getPath(), null, childPackage);
+                fileNames = getClassNameByFile(URLDecoder.decode(url.getPath(), StandardCharsets.UTF_8), childPackage);
             } else if (type.equals("jar")) {
-                fileNames = getClassNameByJar(url.getPath(), childPackage);
+                fileNames = getClassNameByJar(URLDecoder.decode(url.getPath(), StandardCharsets.UTF_8), childPackage);
             }
         } else {
             fileNames = getClassNameByJars(((URLClassLoader) loader).getURLs(), packagePath, childPackage);
@@ -59,13 +61,11 @@ public final class PackageUtil {
      *
      * @param filePath
      *            文件路径
-     * @param className
-     *            类名集合
      * @param childPackage
      *            是否遍历子包
      * @return 类的完整名称
      */
-    private static List<String> getClassNameByFile(String filePath, List<String> className, boolean childPackage) {
+    private static List<String> getClassNameByFile(String filePath, boolean childPackage) {
         List<String> myClassName = new ArrayList<>();
         File file = new File(filePath);
         File[] childFiles = file.listFiles();
@@ -74,7 +74,7 @@ public final class PackageUtil {
         for (File childFile : childFiles) {
             if (childFile.isDirectory()) {
                 if (childPackage) {
-                    myClassName.addAll(getClassNameByFile(childFile.getPath(), myClassName, childPackage));
+                    myClassName.addAll(getClassNameByFile(childFile.getPath(), childPackage));
                 }
             } else {
                 String childFilePath = childFile.getPath();
@@ -106,9 +106,9 @@ public final class PackageUtil {
         String packagePath = jarInfo[1].substring(1);
         try {
             JarFile jarFile = new JarFile(jarFilePath);
-            Enumeration<JarEntry> entrys = jarFile.entries();
-            while (entrys.hasMoreElements()) {
-                JarEntry jarEntry = entrys.nextElement();
+            Enumeration<JarEntry> entries = jarFile.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry jarEntry = entries.nextElement();
                 String entryName = jarEntry.getName();
                 if (entryName.endsWith(".class")) {
                     if (childPackage) {

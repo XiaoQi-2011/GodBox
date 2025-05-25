@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="error" monitorInterval="3600">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="[%d{HH:mm:ss.SSS}] [%-5p] %l - %m%n"/>
+        </Console>
+    </appenders>
+    <loggers>
+        <root level="trace">
+            <appender-ref ref="Console"/>
+        </root>
+    </loggers>
+</configuration>
