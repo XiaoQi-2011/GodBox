@@ -9,6 +9,7 @@ import com.godpalace.godbox.ui.TypeList;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -27,6 +28,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        Locale.setDefault(Locale.CHINA);
+
         try {
             GlobalScreen.registerNativeHook();
             UiSettings.initialize();
@@ -37,7 +40,7 @@ public class Main {
 
             // 创建类型列表
             for (TypeLists typeList : TypeLists.values()) {
-                typeLists.put(typeList, new TypeList(typeList.name()));
+                typeLists.put(typeList, new TypeList(typeList.getName()));
             }
 
             // 添加模块

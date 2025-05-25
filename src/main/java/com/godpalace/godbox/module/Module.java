@@ -5,6 +5,9 @@ import lombok.Getter;
 
 public abstract class Module {
     @Getter
+    private final ModuleSettings settings = new ModuleSettings(getName());
+
+    @Getter
     private boolean enabled = false;
 
     public abstract int getID();

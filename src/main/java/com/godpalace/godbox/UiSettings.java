@@ -20,7 +20,7 @@ public class UiSettings {
     public static Color themeColor = new Color(0, 150, 0);
 
     @Data
-    public static Font font = new Font("Arial", Font.PLAIN, 12);
+    public static Font font = new Font("宋体", Font.PLAIN, 14);
 
     @Data
     public static int moduleHeight = 20;
