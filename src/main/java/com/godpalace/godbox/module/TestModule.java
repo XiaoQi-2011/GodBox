@@ -25,6 +25,8 @@ public class TestModule extends Module {
 
     @Override
     protected void onEnable() {
+        System.out.println("Test module triggered.");
+        Disable();
     }
 
     @Override

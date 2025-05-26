@@ -21,7 +21,7 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
     public TypeList(String typeName) {
         this.typeName = typeName;
 
-        setSize(UiSettings.moduleHeight * 5, UiSettings.moduleHeight);
+        resize();
         addMouseListener(this);
         addMouseMotionListener(this);
     }
@@ -51,13 +51,26 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
         g.setColor(UiSettings.themeColor);
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        // 绘制列表标题
+        // 绘制列表标题背景
         g.fillRect(0, 0, getWidth(), UiSettings.moduleHeight);
         g.setColor(Color.WHITE);
 
+        // 绘制列表标题文字
         int x = getWidth() / 2 - g.getFontMetrics().stringWidth(typeName) / 2;
         int y = UiSettings.moduleHeight / 2 + g.getFontMetrics().getAscent() / 2;
         g.drawString(typeName, x, y);
+
+        // 绘制列表标题状态图标
+        g.setColor(Color.WHITE);
+        if (!isOpen) {
+            // 绘制向下箭头
+            g.drawLine(getWidth() - 10, 5, getWidth() - 15, 10); // /
+            g.drawLine(getWidth() - 10, 5, getWidth() - 5, 10);  // \
+        } else {
+            // 绘制向上箭头
+            g.drawLine(getWidth() - 10, 10, getWidth() - 15, 5); // \
+            g.drawLine(getWidth() - 10, 10, getWidth() - 5, 5);  // /
+        }
 
         // 绘制所有模块
         if (isOpen) {
@@ -83,17 +96,19 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
         int index = e.getY() / UiSettings.moduleHeight;
 
         if (index >= 0 && index <= modules.size()) {
-            if (index == 0) {
-                // 点击列表标题时，切换列表状态
-                isOpen = !isOpen;
-            } else {
-                // 点击模块时，切换模块状态
-                com.godpalace.godbox.module.Module module = modules.get(index - 1);
-
-                if (module.isEnabled()) {
-                    module.Disable();
+            if (e.getButton() == MouseEvent.BUTTON1) {
+                if (index == 0) {
+                    // 点击列表标题时，切换列表状态
+                    isOpen = !isOpen;
                 } else {
-                    module.Enable();
+                    // 点击模块时，切换模块状态
+                    com.godpalace.godbox.module.Module module = modules.get(index - 1);
+
+                    if (module.isEnabled()) {
+                        module.Disable();
+                    } else {
+                        module.Enable();
+                    }
                 }
             }
 
@@ -109,7 +124,7 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
     @Override
     public void mousePressed(MouseEvent e) {
         // 限制拖动范围为模块标题
-        if (e.getY() <= UiSettings.moduleHeight) {
+        if (e.getY() <= UiSettings.moduleHeight && e.getButton() == MouseEvent.BUTTON1) {
             dragX = e.getX();
             dragY = e.getY();
         }
@@ -117,6 +132,8 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        dragX = 0;
+        dragY = 0;
     }
 
     @Override
@@ -130,7 +147,7 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
     @Override
     public void mouseDragged(MouseEvent e) {
         // 移动列表位置
-        if (e.getY() <= UiSettings.moduleHeight) {
+        if (dragX != 0 && dragY != 0) {
             setLocation(e.getXOnScreen() - dragX, e.getYOnScreen() - dragY);
         }
     }
@@ -139,7 +156,7 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
     public void mouseMoved(MouseEvent e) {
     }
 
-    private void resize() {
+    public void resize() {
         // 计算新的窗口高度，确保每个模块都有足够的空间显示
         int height = UiSettings.moduleHeight * (modules.size() + 1);
 
@@ -149,6 +166,6 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
         }
 
         // 调整窗口大小，宽度保持不变，仅调整高度
-        setSize(getWidth(), height);
+        setSize(UiSettings.moduleHeight * 5, height);
     }
 }
