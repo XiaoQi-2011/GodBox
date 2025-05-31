@@ -44,13 +44,13 @@ public class Main {
             }
 
             // 添加模块
-            for (com.godpalace.godbox.module.Module module : ModuleMgr.getModules().values()) {
-                TypeLists typeList = module.getTypeListID();
+            for (com.godpalace.godbox.module.Module module : ModuleMgr.getModules()) {
+                TypeLists typeList = TypeLists.valueOf(module.getTypeListName());
 
                 if (typeLists.containsKey(typeList)) {
                     typeLists.get(typeList).addModule(module);
                 } else {
-                    log.warn("Module {} has no type list", module.getName());
+                    log.warn("Module {} has no type list", module.getDisplayName());
                 }
             }
 
@@ -71,6 +71,8 @@ public class Main {
                     }
                 }
             });
+
+            log.info("GodBox started successfully");
         } catch (Exception e) {
             log.error("Error initializing GodBox", e);
         }

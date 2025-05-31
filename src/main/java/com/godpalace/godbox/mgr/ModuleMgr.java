@@ -1,42 +1,68 @@
 package com.godpalace.godbox.mgr;
 
+import com.godpalace.godbox.TypeLists;
 import com.godpalace.godbox.module.Module;
-import com.godpalace.godbox.util.PackageUtil;
+import com.godpalace.godbox.system.OS;
+import com.godpalace.godbox.ui.ModuleSettingsPanel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 public class ModuleMgr {
     @Getter
-    private static final HashMap<Integer, com.godpalace.godbox.module.Module> modules = new HashMap<>();
+    private static final List<Module> modules = new ArrayList<>();
+
+    private static final File edf = new File("." + File.separator + "edf" + File.separator);
+    private static final File exe = new File("." + File.separator + "exe" + File.separator);
+
+    private static final String executableFileFormat = switch (OS.getSystemType()) {
+        case WINDOWS -> ".exe";
+        case LINUX, MACOS, UNKNOWN -> "";
+    };
 
     public static void initialize() {
-        try {
-            ClassLoader loader = Thread.currentThread().getContextClassLoader();
-            List<String> classes = PackageUtil.getClassName("com.godpalace.godbox.module");
+        if (!edf.exists()) {
+            edf.mkdirs();
+        }
 
-            for (String classPath : classes) {
-                String className = classPath.substring(classPath.lastIndexOf(".") + 1);
+        if (!exe.exists()) {
+            exe.mkdirs();
+        }
 
-                Class<?> clazz = loader.loadClass(classPath);
-                if (clazz.equals(com.godpalace.godbox.module.Module.class)) continue;
-                if (!com.godpalace.godbox.module.Module.class.isAssignableFrom(clazz)) continue;
+        File[] edfFiles = edf.listFiles();
+        if (edfFiles != null) {
+            for (File file : edfFiles) {
+                // 判断是否为edf文件
+                if (file.isFile() && file.getName().endsWith(".json")) {
+                    Module module = Module.fromJsonFile(file);
+                    module.setExePath(file.getAbsolutePath().replace(".json", executableFileFormat));
 
-                com.godpalace.godbox.module.Module module = (Module) clazz.getDeclaredConstructor().newInstance();
-                if (modules.containsKey(module.getID())) {
-                    log.error("Duplicate module ID: {}", module.getID());
-                    continue;
+                    // 判断是否存在对应的可执行文件
+                    if (!new File(module.getExePath()).exists()) {
+                        log.warn("Executable file {} not found in exe folder", module.getExePath());
+                    }
+
+                    // 判断TypeList是否存在
+                    try {
+                        TypeLists.valueOf(module.getTypeListName());
+                    } catch (IllegalArgumentException e) {
+                        log.error("TypeList {} not found", module.getTypeListName());
+                        continue;
+                    }
+
+                    // 创建模块配置面板
+                    ModuleSettingsPanel panel = new ModuleSettingsPanel(module.getArgs());
+                    module.setSettingsPanel(panel);
+
+                    // 添加到modules列表中
+                    modules.add(module);
+                    log.info("Module {} loaded", module.getDisplayName());
                 }
-
-                modules.put(module.getID(), module);
-                log.debug("Loading module: {}", className);
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 }
-

@@ -83,10 +83,10 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
                 g.fillRect(0, yOffset, getWidth(), UiSettings.moduleHeight);
 
                 // 绘制模块名称
-                x = getWidth() / 2 - g.getFontMetrics().stringWidth(module.getName()) / 2;
+                x = getWidth() / 2 - g.getFontMetrics().stringWidth(module.getDisplayName()) / 2;
                 y = yOffset + UiSettings.moduleHeight / 2 + g.getFontMetrics().getAscent() / 2;
                 g.setColor(Color.WHITE);
-                g.drawString(module.getName(), x, y);
+                g.drawString(module.getDisplayName(), x, y);
             }
         }
     }
@@ -96,18 +96,29 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
         int index = e.getY() / UiSettings.moduleHeight;
 
         if (index >= 0 && index <= modules.size()) {
-            if (e.getButton() == MouseEvent.BUTTON1) {
-                if (index == 0) {
-                    // 点击列表标题时，切换列表状态
+            if (index == 0) {
+                // 点击列表标题时，切换列表状态
+                if (e.getButton() == MouseEvent.BUTTON1) {
                     isOpen = !isOpen;
-                } else {
-                    // 点击模块时，切换模块状态
-                    com.godpalace.godbox.module.Module module = modules.get(index - 1);
+                }
+            } else {
+                com.godpalace.godbox.module.Module module = modules.get(index - 1);
 
+                // 点击模块时，切换模块状态
+                if (e.getButton() == MouseEvent.BUTTON1) {
                     if (module.isEnabled()) {
                         module.Disable();
                     } else {
                         module.Enable();
+                    }
+                }
+
+                // 打开模块配置面板
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    ModuleSettingsPanel panel = module.getSettingsPanel();
+
+                    if (panel != null) {
+                        panel.setVisible(true);
                     }
                 }
             }

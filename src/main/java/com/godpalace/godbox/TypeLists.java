@@ -4,7 +4,10 @@ import lombok.Getter;
 
 public enum TypeLists {
     TEST("测试"),
-    SCREEN("屏幕");
+    SCREEN("屏幕"),
+    SYSTEM("系统"),
+    NETWORK("网络"),
+    SETTINGS("设置");
 
     @Getter
     private final String name;
