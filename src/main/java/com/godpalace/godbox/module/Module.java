@@ -2,13 +2,13 @@ package com.godpalace.godbox.module;
 
 import com.godpalace.godbox.mgr.GsonFactory;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 
 @Getter
 public class Module {

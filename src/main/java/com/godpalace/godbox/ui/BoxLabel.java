@@ -11,6 +11,9 @@ import java.awt.*;
 @Getter
 public class BoxLabel extends JComponent {
     private String text;
+    private boolean hasBorder = false;
+    private int pos = SwingConstants.CENTER;
+    private Color color = UiSettings.themeColor;
 
     public BoxLabel() {
         this("");
@@ -24,10 +27,25 @@ public class BoxLabel extends JComponent {
     @Override
     public void paintComponent(Graphics g) {
         g.setFont(UiSettings.font);
-        g.setColor(UiSettings.themeColor);
+        g.setColor(color);
 
-        int x = (getWidth() - g.getFontMetrics().stringWidth(text)) / 2;
+        // 画边框
+        g.drawRect(0, 0, getWidth(), getHeight());
+
+        // 画文字
         int y = (getHeight() - g.getFontMetrics().getAscent()) / 2;
-        g.drawString(text, x, y);
+        g.drawString(text, getTextX(g), y);
+    }
+
+    private int getTextX(Graphics g) {
+        switch (pos) {
+            case SwingConstants.CENTER -> {
+                return (getWidth() - g.getFontMetrics().stringWidth(text)) / 2;
+            }
+
+            default -> {
+                return 5;
+            }
+        }
     }
 }

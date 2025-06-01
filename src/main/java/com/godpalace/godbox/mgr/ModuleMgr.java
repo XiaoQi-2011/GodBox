@@ -24,6 +24,14 @@ public class ModuleMgr {
         case LINUX, MACOS, UNKNOWN -> "";
     };
 
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            for (Module module : modules) {
+                module.save();
+            }
+        }));
+    }
+
     public static void initialize() {
         if (!edf.exists()) {
             edf.mkdirs();
@@ -39,6 +47,7 @@ public class ModuleMgr {
                 // 判断是否为edf文件
                 if (file.isFile() && file.getName().endsWith(".json")) {
                     Module module = Module.fromJsonFile(file);
+                    module.setPath(file.getAbsolutePath());
                     module.setExePath(file.getAbsolutePath().substring(0, file.getAbsolutePath().lastIndexOf(".")) + executableFileFormat);
 
                     // 判断是否存在对应的可执行文件

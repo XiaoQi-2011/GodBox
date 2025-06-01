@@ -6,6 +6,7 @@ import com.godpalace.godbox.module.ModuleArg;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -16,13 +17,16 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
     private final String description;
     private static final Color DISABLED_COLOR = new Color(25, 25, 25);
 
-    public ModuleSettingsPanel(ModuleArg[] args) {
+    public ModuleSettingsPanel(String moduleName, String description, ModuleArg[] args) {
+        super();
         this.args = args;
-        this.parent = Main.getSettings();
+        this.moduleName = moduleName;
+        this.description = description;
 
         // 设置面板
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setSize(200, (args.length + 1) * UiSettings.moduleHeight + 8);
+        setBorder(new LineBorder(UiSettings.themeColor));
         setFocusable(true);
         addKeyListener(new KeyListener());
 
@@ -35,6 +39,25 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
     // 初始化配置面板
     private void initComponents() {
+        // 添加标题
+        JPanel titlePanel = new JPanel();
+        titlePanel.setSize(getWidth(), UiSettings.moduleHeight);
+        titlePanel.setLayout(new BorderLayout());
+        titlePanel.setBackground(UiSettings.themeColor);
+
+        BoxLabel title = new BoxLabel(moduleName);
+        title.setColor(Color.WHITE);
+        titlePanel.add(title, BorderLayout.CENTER);
+
+        add(titlePanel);
+
+        // 添加描述
+        BoxLabel dsp = new BoxLabel(description);
+        dsp.setPos(SwingConstants.LEFT);
+        dsp.setPreferredSize(new Dimension(getWidth(), UiSettings.moduleHeight));
+        dsp.setColor(Color.WHITE);
+        add(dsp);
+
         // 添加配置项
         for (ModuleArg arg : args) {
             BoxLabel label = new BoxLabel(arg.getName() + ":");
@@ -48,15 +71,20 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     textField.addActionListener(e -> arg.setValue(textField.getText()));
+                    textField.addFocusListener(new FocusAdapter() {
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                            arg.setValue(textField.getText());
+                        }
+                    });
 
                     yield textField;
                 }
 
                 case "char" -> {
-                    JLabel keyLabel = new JLabel(arg.getValue() + "");
-                    keyLabel.setFont(UiSettings.font);
-                    keyLabel.setOpaque(true);
+                    BoxLabel keyLabel = new BoxLabel(arg.getValue() + "");
                     keyLabel.setFocusable(true);
+                    keyLabel.setHasBorder(true);
 
                     // 点击时开始监听
                     keyLabel.addFocusListener(new FocusListener() {
@@ -211,8 +239,21 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                 }
 
                 default -> {
-                    log.error("Unknown type: {}", arg.getType());
-                    yield new JLabel("Error");
+                    log.warn("Not support type: {}", arg.getType());
+
+                    JTextField textField = new JTextField(arg.getValue() + "");
+                    textField.setFont(UiSettings.font);
+
+                    // 监听输入
+                    textField.addActionListener(e -> arg.setValue(textField.getText()));
+                    textField.addFocusListener(new FocusAdapter() {
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                            arg.setValue(textField.getText());
+                        }
+                    });
+
+                    yield textField;
                 }
             };
 
