@@ -17,21 +17,46 @@ public class ModuleSettingsPanel extends JPanel implements MouseListener, MouseM
 
         // 设置面板
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setSize(500, 500);
-        setLocation(0, 0);
+        setSize(200, (args.length + 1) * UiSettings.moduleHeight + 8);
+
+        int x = (Toolkit.getDefaultToolkit().getScreenSize().width - getWidth()) / 2;
+        int y = (Toolkit.getDefaultToolkit().getScreenSize().height - getHeight()) / 2;
+        setLocation(x, y);
 
         initComponents();
     }
 
     // 初始化配置面板
     private void initComponents() {
-        JLabel title = new JLabel("设置");
-        title.setFont(UiSettings.font);
-        title.setSize(title.getWidth(), UiSettings.moduleHeight);
-        add(title);
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(new BorderLayout());
+        titlePanel.setSize(new Dimension(getWidth(), UiSettings.moduleHeight));
 
+        JLabel title = new JLabel("设置");
+        title.setHorizontalAlignment(JLabel.LEFT);
+        title.setBackground(Color.WHITE);
+        title.setForeground(UiSettings.themeColor);
+        title.setFont(UiSettings.font);
+        titlePanel.add(title, BorderLayout.CENTER);
+
+        JButton closeButton = new JButton("X");
+        closeButton.setSize(UiSettings.moduleHeight, UiSettings.moduleHeight);
+        closeButton.setBackground(Color.WHITE);
+        closeButton.setForeground(UiSettings.themeColor);
+        closeButton.setFont(UiSettings.font);
+        closeButton.addActionListener(e -> getParent().setVisible(false));
+        titlePanel.add(closeButton, BorderLayout.EAST);
+
+        add(titlePanel);
+
+        // 添加配置项
         for (ModuleArg arg : args) {
             JLabel label = new JLabel(arg.getName() + ":");
+            label.setHorizontalAlignment(JLabel.LEFT);
+            label.setBackground(Color.WHITE);
+            label.setForeground(UiSettings.themeColor);
+            label.setFont(UiSettings.font);
+
             JComponent input = switch (arg.getType()) {
                 case "string" -> {
                     JTextField textField = new JTextField(arg.getValue() + "");
@@ -206,6 +231,9 @@ public class ModuleSettingsPanel extends JPanel implements MouseListener, MouseM
                     yield new JLabel("Error");
                 }
             };
+
+            input.setBackground(Color.WHITE);
+            input.setFont(UiSettings.font);
 
             // 创建面板
             JPanel panel = new JPanel();
