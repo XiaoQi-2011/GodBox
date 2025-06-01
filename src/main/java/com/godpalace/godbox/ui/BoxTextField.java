@@ -19,7 +19,6 @@ public class BoxTextField extends JComponent implements MouseListener, KeyListen
     private String text;
 
     public BoxTextField(String text) {
-        super();
         this.text = text;
 
         setFocusable(true);

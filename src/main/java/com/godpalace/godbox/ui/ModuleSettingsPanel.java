@@ -15,7 +15,6 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
     private final ModuleArg[] args;
     private final String moduleName;
     private final String description;
-    private static final Color DISABLED_COLOR = new Color(25, 25, 25);
 
     public ModuleSettingsPanel(String moduleName, String description, ModuleArg[] args) {
         super();
@@ -35,34 +34,16 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         setLocation(x, y);
 
         initComponents();
+        SwingUtilities.updateComponentTreeUI(this);
+        requestFocus();
     }
 
     // 初始化配置面板
     private void initComponents() {
-        // 添加标题
-        JPanel titlePanel = new JPanel();
-        titlePanel.setSize(getWidth(), UiSettings.moduleHeight);
-        titlePanel.setLayout(new BorderLayout());
-        titlePanel.setBackground(UiSettings.themeColor);
-
-        BoxLabel title = new BoxLabel(moduleName);
-        title.setColor(Color.WHITE);
-        titlePanel.add(title, BorderLayout.CENTER);
-        add(titlePanel);
-
-        // 添加描述
-        BoxLabel dsp = new BoxLabel(description);
-        dsp.setSize(getWidth(), UiSettings.moduleHeight);
-        dsp.setPos(SwingConstants.LEFT);
-        dsp.setPreferredSize(new Dimension(getWidth(), UiSettings.moduleHeight));
-        dsp.setColor(Color.WHITE);
-        add(dsp);
-
         // 添加配置项
         for (ModuleArg arg : args) {
-            BoxLabel label = new BoxLabel(arg.getName() + ":");
-            label.setColor(Color.WHITE);
-            label.setPos(SwingConstants.CENTER);
+            JLabel label = new JLabel(arg.getName() + ":");
+            //label.setColor(Color.WHITE);
 
             JComponent input = switch (arg.getType()) {
                 case "string" -> {
@@ -319,8 +300,8 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         @Override
         public void keyReleased(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                Main.getUi().setVisible(true);
                 Main.getSettings().setVisible(false);
+                Main.getUi().setVisible(true);
             }
         }
     }

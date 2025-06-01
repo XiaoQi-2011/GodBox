@@ -4,6 +4,5 @@ import javax.swing.*;
 
 public class BoxSpinner extends JSpinner {
     public BoxSpinner() {
-        super();
     }
 }

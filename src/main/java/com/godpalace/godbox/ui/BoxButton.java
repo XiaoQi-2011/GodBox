@@ -21,7 +21,6 @@ public class BoxButton extends JComponent implements MouseListener {
     private final AtomicBoolean isEnter = new AtomicBoolean(false);
 
     private BoxButton(String text) {
-        super();
         this.text = text;
 
         addMouseListener(this);

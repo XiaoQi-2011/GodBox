@@ -20,7 +20,6 @@ public class BoxLabel extends JComponent {
     }
 
     public BoxLabel(String text) {
-        super();
         this.text = text;
     }
 
@@ -30,7 +29,9 @@ public class BoxLabel extends JComponent {
         g.setColor(color);
 
         // 画边框
-        g.drawRect(0, 0, getWidth(), getHeight());
+        if (hasBorder) {
+            g.drawRect(0, 0, getWidth(), getHeight());
+        }
 
         // 画文字
         int y = (getHeight() - g.getFontMetrics().getAscent()) / 2;
@@ -38,14 +39,10 @@ public class BoxLabel extends JComponent {
     }
 
     private int getTextX(Graphics g) {
-        switch (pos) {
-            case SwingConstants.CENTER -> {
-                return (getWidth() - g.getFontMetrics().stringWidth(text)) / 2;
-            }
-
-            default -> {
-                return 5;
-            }
+        if (pos == SwingConstants.CENTER) {
+            return (getWidth() - g.getFontMetrics().stringWidth(text)) / 2;
         }
+
+        return 5;
     }
 }

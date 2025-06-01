@@ -5,7 +5,6 @@ import java.awt.*;
 
 public class BoxPanel extends JPanel {
     public BoxPanel() {
-        super();
         setBackground(new Color(25, 25, 25));
     }
 }
