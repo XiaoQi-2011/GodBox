@@ -12,6 +12,17 @@ import java.io.FileReader;
 
 @Getter
 public class Module {
+    public static Module fromJsonFile(File json) {
+        try (FileReader reader = new FileReader(json)) {
+            return GsonFactory.getGson().fromJson(reader, Module.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Setter
+    private transient String path;
+
     @SerializedName("display_name")
     private String displayName;
     private String description;
@@ -49,9 +60,11 @@ public class Module {
         isEnabled = false;
     }
 
-    public static Module fromJsonFile(File json) {
-        try (FileReader reader = new FileReader(json)) {
-            return GsonFactory.getGson().fromJson(reader, Module.class);
+    public void save() {
+        File file = new File(path);
+
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(toString());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -55,7 +55,7 @@ public class ModuleMgr {
                     }
 
                     // 创建模块配置面板
-                    ModuleSettingsPanel panel = new ModuleSettingsPanel(module.getArgs());
+                    ModuleSettingsPanel panel = new ModuleSettingsPanel(module.getDisplayName(), module.getDescription(), module.getArgs());
                     module.setSettingsPanel(panel);
 
                     // 添加到modules列表中

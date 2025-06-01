@@ -12,7 +12,9 @@ import java.awt.event.*;
 @Slf4j
 public class ModuleSettingsPanel extends BoxPanel implements MouseListener, MouseMotionListener {
     private final ModuleArg[] args;
-    private final BackgroundFrame parent;
+    private final String moduleName;
+    private final String description;
+    private static final Color DISABLED_COLOR = new Color(25, 25, 25);
 
     public ModuleSettingsPanel(ModuleArg[] args) {
         this.args = args;
@@ -35,11 +37,9 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
     private void initComponents() {
         // 添加配置项
         for (ModuleArg arg : args) {
-            JLabel label = new JLabel(arg.getName() + ":");
-            label.setHorizontalAlignment(JLabel.LEFT);
-            label.setBackground(Color.WHITE);
-            label.setForeground(UiSettings.themeColor);
-            label.setFont(UiSettings.font);
+            BoxLabel label = new BoxLabel(arg.getName() + ":");
+            label.setColor(Color.WHITE);
+            label.setPos(SwingConstants.CENTER);
 
             JComponent input = switch (arg.getType()) {
                 case "string" -> {
@@ -216,7 +216,6 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                 }
             };
 
-            input.setBackground(Color.WHITE);
             input.setFont(UiSettings.font);
             input.setFocusable(true);
             input.addKeyListener(new KeyListener());

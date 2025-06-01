@@ -33,7 +33,7 @@ public class BoxButton extends JComponent implements MouseListener {
 
         // 画背景
         g.setColor(getBackgroundColor());
-        g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+        g.fillRect(0, 0, getWidth(), getHeight());
 
         // 画边框
         g.setColor(UiSettings.themeColor);
