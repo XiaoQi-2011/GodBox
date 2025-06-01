@@ -25,7 +25,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
         // 设置面板
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setSize(200, (args.length + 1) * UiSettings.moduleHeight + 8);
+        setSize(300, (args.length + 2) * UiSettings.moduleHeight);
         setBorder(new LineBorder(UiSettings.themeColor));
         setFocusable(true);
         addKeyListener(new KeyListener());
@@ -48,11 +48,11 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         BoxLabel title = new BoxLabel(moduleName);
         title.setColor(Color.WHITE);
         titlePanel.add(title, BorderLayout.CENTER);
-
         add(titlePanel);
 
         // 添加描述
         BoxLabel dsp = new BoxLabel(description);
+        dsp.setSize(getWidth(), UiSettings.moduleHeight);
         dsp.setPos(SwingConstants.LEFT);
         dsp.setPreferredSize(new Dimension(getWidth(), UiSettings.moduleHeight));
         dsp.setColor(Color.WHITE);
