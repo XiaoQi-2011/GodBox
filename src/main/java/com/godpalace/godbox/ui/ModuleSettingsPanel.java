@@ -1,5 +1,6 @@
 package com.godpalace.godbox.ui;
 
+import com.godpalace.godbox.Main;
 import com.godpalace.godbox.UiSettings;
 import com.godpalace.godbox.module.ModuleArg;
 import lombok.extern.slf4j.Slf4j;
@@ -9,15 +10,19 @@ import java.awt.*;
 import java.awt.event.*;
 
 @Slf4j
-public class ModuleSettingsPanel extends JPanel implements MouseListener, MouseMotionListener {
+public class ModuleSettingsPanel extends BoxPanel implements MouseListener, MouseMotionListener {
     private final ModuleArg[] args;
+    private final BackgroundFrame parent;
 
     public ModuleSettingsPanel(ModuleArg[] args) {
         this.args = args;
+        this.parent = Main.getSettings();
 
         // 设置面板
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setSize(200, (args.length + 1) * UiSettings.moduleHeight + 8);
+        setFocusable(true);
+        addKeyListener(new KeyListener());
 
         int x = (Toolkit.getDefaultToolkit().getScreenSize().width - getWidth()) / 2;
         int y = (Toolkit.getDefaultToolkit().getScreenSize().height - getHeight()) / 2;
@@ -28,27 +33,6 @@ public class ModuleSettingsPanel extends JPanel implements MouseListener, MouseM
 
     // 初始化配置面板
     private void initComponents() {
-        JPanel titlePanel = new JPanel();
-        titlePanel.setLayout(new BorderLayout());
-        titlePanel.setSize(new Dimension(getWidth(), UiSettings.moduleHeight));
-
-        JLabel title = new JLabel("设置");
-        title.setHorizontalAlignment(JLabel.LEFT);
-        title.setBackground(Color.WHITE);
-        title.setForeground(UiSettings.themeColor);
-        title.setFont(UiSettings.font);
-        titlePanel.add(title, BorderLayout.CENTER);
-
-        JButton closeButton = new JButton("X");
-        closeButton.setSize(UiSettings.moduleHeight, UiSettings.moduleHeight);
-        closeButton.setBackground(Color.WHITE);
-        closeButton.setForeground(UiSettings.themeColor);
-        closeButton.setFont(UiSettings.font);
-        closeButton.addActionListener(e -> getParent().setVisible(false));
-        titlePanel.add(closeButton, BorderLayout.EAST);
-
-        add(titlePanel);
-
         // 添加配置项
         for (ModuleArg arg : args) {
             JLabel label = new JLabel(arg.getName() + ":");
@@ -234,9 +218,11 @@ public class ModuleSettingsPanel extends JPanel implements MouseListener, MouseM
 
             input.setBackground(Color.WHITE);
             input.setFont(UiSettings.font);
+            input.setFocusable(true);
+            input.addKeyListener(new KeyListener());
 
             // 创建面板
-            JPanel panel = new JPanel();
+            BoxPanel panel = new BoxPanel();
             panel.setLayout(new BorderLayout());
 
             // 添加到面板中, 并添加到父面板中
@@ -287,5 +273,15 @@ public class ModuleSettingsPanel extends JPanel implements MouseListener, MouseM
 
     @Override
     public void mouseMoved(MouseEvent e) {
+    }
+
+    static class KeyListener extends KeyAdapter {
+        @Override
+        public void keyReleased(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                Main.getUi().setVisible(true);
+                Main.getSettings().setVisible(false);
+            }
+        }
     }
 }

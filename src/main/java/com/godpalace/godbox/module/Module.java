@@ -27,6 +27,10 @@ public class Module {
     @SerializedName("enabled")
     private boolean isEnabled;
 
+    // 判断鼠标是否进入
+    @Setter
+    private transient boolean isEntered;
+
     // 模块运行时参数
     private ModuleArg[] args;
 

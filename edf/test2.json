@@ -1,0 +1,15 @@
+{
+  "display_name": "测试2",
+  "description": "测试描述2",
+  "version": "1.0.0",
+  "author": "测试作者2",
+  "type": "TEST",
+  "enabled": false,
+  "args": [
+    {
+      "name": "Hello",
+      "type": "string",
+      "value": "value"
+    }
+  ]
+}

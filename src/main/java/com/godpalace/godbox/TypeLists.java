@@ -2,6 +2,7 @@ package com.godpalace.godbox;
 
 import lombok.Getter;
 
+@Getter
 public enum TypeLists {
     TEST("测试"),
     SCREEN("屏幕"),
@@ -9,7 +10,6 @@ public enum TypeLists {
     NETWORK("网络"),
     SETTINGS("设置");
 
-    @Getter
     private final String name;
 
     TypeLists(String name) {

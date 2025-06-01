@@ -10,24 +10,28 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
+import com.godpalace.godbox.module.Module;
 
 public class TypeList extends JComponent implements MouseListener, MouseMotionListener {
     private static final Color DISABLED_COLOR = new Color(25, 25, 25);
+    private static final Color ENTERED_COLOR = new Color(80, 80, 80);
 
     private final String typeName;
-    private final List<com.godpalace.godbox.module.Module> modules = new ArrayList<>();
+    private final List<Module> modules = new ArrayList<>();
 
     private boolean isOpen = true;
 
     public TypeList(String typeName) {
+        super();
         this.typeName = typeName;
 
-        resize();
         addMouseListener(this);
         addMouseMotionListener(this);
+
+        resize();
     }
 
-    public void addModule(com.godpalace.godbox.module.Module module) {
+    public void addModule(Module module) {
         if (module == null) return;
 
         modules.add(module);
@@ -35,7 +39,7 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
         repaint();
     }
 
-    public void removeModule(com.godpalace.godbox.module.Module module) {
+    public void removeModule(Module module) {
         if (module == null) return;
 
         modules.remove(module);
@@ -64,11 +68,11 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
         // 绘制列表标题状态图标
         g.setColor(Color.WHITE);
         if (!isOpen) {
-            // 绘制向下箭头
-            g.drawLine(getWidth() - 10, 5, getWidth() - 15, 10); // /
+            // 绘制向右箭头
             g.drawLine(getWidth() - 10, 5, getWidth() - 5, 10);  // \
+            g.drawLine(getWidth() - 5, 10, getWidth() - 10, 15); // |
         } else {
-            // 绘制向上箭头
+            // 绘制向下箭头
             g.drawLine(getWidth() - 10, 10, getWidth() - 15, 5); // \
             g.drawLine(getWidth() - 10, 10, getWidth() - 5, 5);  // /
         }
@@ -76,12 +80,29 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
         // 绘制所有模块
         if (isOpen) {
             for (int i = 0; i < modules.size(); i++) {
-                com.godpalace.godbox.module.Module module = modules.get(i);
+                Module module = modules.get(i);
                 int yOffset = UiSettings.moduleHeight * (i + 1);
 
                 // 绘制模块
-                g.setColor(module.isEnabled()? UiSettings.themeColor : DISABLED_COLOR);
+                g.setColor(UiSettings.themeColor);
                 g.fillRect(0, yOffset, getWidth(), UiSettings.moduleHeight);
+
+                // 绘制模块状态
+                if (module.isEnabled()){
+                    g.setColor(ENTERED_COLOR);
+                    g.fillRect(0, yOffset, getWidth(), UiSettings.moduleHeight);
+
+                    g.setColor(UiSettings.themeColor);
+                    g.fillRect(0, yOffset, 3, UiSettings.moduleHeight);
+                } else {
+                    if (module.isEntered()){
+                        g.setColor(ENTERED_COLOR);
+                        g.fillRect(0, yOffset, getWidth(), UiSettings.moduleHeight);
+                    } else {
+                        g.setColor(DISABLED_COLOR);
+                        g.fillRect(0, yOffset, getWidth(), UiSettings.moduleHeight);
+                    }
+                }
 
                 // 绘制模块名称
                 x = getWidth() / 2 - g.getFontMetrics().stringWidth(module.getDisplayName()) / 2;
@@ -103,7 +124,7 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
                     isOpen = !isOpen;
                 }
             } else {
-                com.godpalace.godbox.module.Module module = modules.get(index - 1);
+                Module module = modules.get(index - 1);
 
                 // 点击模块时，切换模块状态
                 if (e.getButton() == MouseEvent.BUTTON1) {
@@ -119,9 +140,6 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
                     ModuleSettingsPanel panel = module.getSettingsPanel();
 
                     if (panel != null) {
-                        // 关闭模块面板
-                        Main.getUi().setVisible(false);
-
                         // 配置面板内容
                         BackgroundFrame settings = Main.getSettings();
                         settings.getContentPane().removeAll();
@@ -129,6 +147,9 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
 
                         // 显示模块配置面板
                         settings.setVisible(true);
+
+                        // 关闭模块面板
+                        Main.getUi().setVisible(false);
                     }
                 }
             }
@@ -163,6 +184,13 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
 
     @Override
     public void mouseExited(MouseEvent e) {
+        // 鼠标退出模块时，显示模块退出状态
+        for (Module m : modules){
+            m.setEntered(false);
+        }
+
+        resize();
+        repaint();
     }
 
     @Override
@@ -175,6 +203,22 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        int index = e.getY() / UiSettings.moduleHeight;
+        if (index >= 0 && index <= modules.size()) {
+            for (Module m : modules){
+                // 鼠标退出模块时，显示模块退出状态
+                m.setEntered(false);
+            }
+            if (index != 0) {
+                Module module = modules.get(index - 1);
+
+                // 鼠标进入模块时，显示模块进入状态
+                module.setEntered(true);
+            }
+
+            resize();
+            repaint();
+        }
     }
 
     public void resize() {
