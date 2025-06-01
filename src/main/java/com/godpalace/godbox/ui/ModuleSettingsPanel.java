@@ -1,33 +1,41 @@
 package com.godpalace.godbox.ui;
 
+import com.godpalace.godbox.UiSettings;
 import com.godpalace.godbox.module.ModuleArg;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 @Slf4j
-public class ModuleSettingsPanel extends JPanel {
+public class ModuleSettingsPanel extends JPanel implements MouseListener, MouseMotionListener {
     private final ModuleArg[] args;
 
     public ModuleSettingsPanel(ModuleArg[] args) {
         this.args = args;
+
+        // 设置面板
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setSize(500, 500);
+        setLocation(0, 0);
+
         initComponents();
     }
 
     // 初始化配置面板
     private void initComponents() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        JLabel title = new JLabel("设置");
+        title.setFont(UiSettings.font);
+        title.setSize(title.getWidth(), UiSettings.moduleHeight);
+        add(title);
 
         for (ModuleArg arg : args) {
             JLabel label = new JLabel(arg.getName() + ":");
-            JComponent input = switch (arg.getType().getName()) {
-                case "java.lang.String" -> {
-                    JTextField textField = new JTextField((String) arg.getValue());
+            JComponent input = switch (arg.getType()) {
+                case "string" -> {
+                    JTextField textField = new JTextField(arg.getValue() + "");
+                    textField.setFont(UiSettings.font);
 
                     // 监听输入
                     textField.addActionListener(e -> arg.setValue(textField.getText()));
@@ -35,14 +43,15 @@ public class ModuleSettingsPanel extends JPanel {
                     yield textField;
                 }
 
-                case "java.lang.Character", "char" -> {
-                    JLabel keyLabel = new JLabel("Null");
+                case "char" -> {
+                    JLabel keyLabel = new JLabel(arg.getValue() + "");
+                    keyLabel.setFont(UiSettings.font);
                     keyLabel.setOpaque(true);
                     keyLabel.setFocusable(true);
 
                     // 点击时开始监听
                     keyLabel.addFocusListener(new FocusListener() {
-                        private String last = "Null";
+                        private String last = keyLabel.getText();
 
                         @Override
                         public void focusGained(FocusEvent e) {
@@ -74,14 +83,32 @@ public class ModuleSettingsPanel extends JPanel {
                     yield keyLabel;
                 }
 
-                case "short", "java.lang.Short" -> {
+                case "byte" -> {
                     SpinnerNumberModel model = new SpinnerNumberModel(
-                            (short) arg.getValue(),
-                            (short) arg.getMin(),
-                            (short) arg.getMax(),
-                            (short) arg.getStep());
+                            Byte.parseByte(arg.getValue() + ""),
+                            Byte.parseByte(arg.getMin() + ""),
+                            Byte.parseByte(arg.getMax() + ""),
+                            Byte.parseByte(arg.getStep() + ""));
 
                     JSpinner spinner = new JSpinner(model);
+                    spinner.setFont(UiSettings.font);
+                    spinner.setEditor(new JSpinner.NumberEditor(spinner, "#"));
+
+                    // 监听输入
+                    spinner.addChangeListener(e -> arg.setValue((byte) spinner.getValue()));
+
+                    yield spinner;
+                }
+
+                case "short" -> {
+                    SpinnerNumberModel model = new SpinnerNumberModel(
+                            Short.parseShort(arg.getValue() + ""),
+                            Short.parseShort(arg.getMin() + ""),
+                            Short.parseShort(arg.getMax() + ""),
+                            Short.parseShort(arg.getStep() + ""));
+
+                    JSpinner spinner = new JSpinner(model);
+                    spinner.setFont(UiSettings.font);
                     spinner.setEditor(new JSpinner.NumberEditor(spinner, "#"));
 
                     // 监听输入
@@ -90,14 +117,15 @@ public class ModuleSettingsPanel extends JPanel {
                     yield spinner;
                 }
 
-                case "int", "Java.lang.Integer" -> {
+                case "int" -> {
                     SpinnerNumberModel model = new SpinnerNumberModel(
-                            (int) arg.getValue(),
-                            (int) arg.getMin(),
-                            (int) arg.getMax(),
-                            (int) arg.getStep());
+                            Integer.parseInt(arg.getValue() + ""),
+                            Integer.parseInt(arg.getMin() + ""),
+                            Integer.parseInt(arg.getMax() + ""),
+                            Integer.parseInt(arg.getStep() + ""));
 
                     JSpinner spinner = new JSpinner(model);
+                    spinner.setFont(UiSettings.font);
                     spinner.setEditor(new JSpinner.NumberEditor(spinner, "#"));
 
                     // 监听输入
@@ -106,14 +134,15 @@ public class ModuleSettingsPanel extends JPanel {
                     yield spinner;
                 }
 
-                case "long", "java.lang.Long" -> {
+                case "long" -> {
                     SpinnerNumberModel model = new SpinnerNumberModel(
-                            (long) arg.getValue(),
-                            (long) arg.getMin(),
-                            (long) arg.getMax(),
-                            (long) arg.getStep());
+                            Long.parseLong(arg.getValue() + ""),
+                            Long.parseLong(arg.getMin() + ""),
+                            Long.parseLong(arg.getMax() + ""),
+                            Long.parseLong(arg.getStep() + ""));
 
                     JSpinner spinner = new JSpinner(model);
+                    spinner.setFont(UiSettings.font);
                     spinner.setEditor(new JSpinner.NumberEditor(spinner, "#"));
 
                     // 监听输入
@@ -122,9 +151,9 @@ public class ModuleSettingsPanel extends JPanel {
                     yield spinner;
                 }
 
-                case "boolean", "java.lang.Boolean" -> {
+                case "boolean" -> {
                     JCheckBox checkbox = new JCheckBox();
-                    checkbox.setSelected((boolean) arg.getValue());
+                    checkbox.setSelected(Boolean.parseBoolean(arg.getValue() + ""));
 
                     // 监听输入
                     checkbox.addActionListener(e -> arg.setValue(checkbox.isSelected()));
@@ -132,17 +161,18 @@ public class ModuleSettingsPanel extends JPanel {
                     yield checkbox;
                 }
 
-                case "float", "java.lang.Float" -> {
+                case "float" -> {
                     SpinnerNumberModel model = new SpinnerNumberModel(
-                            (float) arg.getValue(),
-                            (float) arg.getMin(),
-                            (float) arg.getMax(),
-                            (float) arg.getStep());
+                            Float.parseFloat(arg.getValue() + ""),
+                            Float.parseFloat(arg.getMin() + ""),
+                            Float.parseFloat(arg.getMax() + ""),
+                            Float.parseFloat(arg.getStep() + ""));
 
                     // 格式化显示
                     String format = "#0." + "#".repeat(((String) arg.getStep()).length() - 2);
 
                     JSpinner spinner = new JSpinner(model);
+                    spinner.setFont(UiSettings.font);
                     spinner.setEditor(new JSpinner.NumberEditor(spinner, format));
 
                     // 监听输入
@@ -151,17 +181,18 @@ public class ModuleSettingsPanel extends JPanel {
                     yield spinner;
                 }
 
-                case "double", "java.lang.Double" -> {
+                case "double" -> {
                     SpinnerNumberModel model = new SpinnerNumberModel(
-                            (double) arg.getValue(),
-                            (double) arg.getMin(),
-                            (double) arg.getMax(),
-                            (double) arg.getStep());
+                            Double.parseDouble(arg.getValue() + ""),
+                            Double.parseDouble(arg.getMin() + ""),
+                            Double.parseDouble(arg.getMax() + ""),
+                            Double.parseDouble(arg.getStep() + ""));
 
                     // 格式化显示
                     String format = "#0." + "#".repeat(((String) arg.getStep()).length() - 2);
 
                     JSpinner spinner = new JSpinner(model);
+                    spinner.setFont(UiSettings.font);
                     spinner.setEditor(new JSpinner.NumberEditor(spinner, format));
 
                     // 监听输入
@@ -170,7 +201,10 @@ public class ModuleSettingsPanel extends JPanel {
                     yield spinner;
                 }
 
-                default -> throw new IllegalStateException("Unexpected value: " + arg.getType().getName());
+                default -> {
+                    log.error("Unknown type: {}", arg.getType());
+                    yield new JLabel("Error");
+                }
             };
 
             // 创建面板
@@ -182,5 +216,48 @@ public class ModuleSettingsPanel extends JPanel {
             panel.add(input, BorderLayout.EAST);
             add(panel);
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    // 拖动时的鼠标位置
+    private int dragX;
+    private int dragY;
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // 限制拖动范围为模块标题
+        if (e.getY() <= UiSettings.moduleHeight && e.getButton() == MouseEvent.BUTTON1) {
+            dragX = e.getX();
+            dragY = e.getY();
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        dragX = 0;
+        dragY = 0;
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        // 移动列表位置
+        if (dragX != 0 && dragY != 0) {
+            setLocation(e.getXOnScreen() - dragX, e.getYOnScreen() - dragY);
+        }
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
     }
 }

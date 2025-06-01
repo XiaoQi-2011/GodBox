@@ -1,5 +1,6 @@
 package com.godpalace.godbox.ui;
 
+import com.godpalace.godbox.Main;
 import com.godpalace.godbox.UiSettings;
 
 import javax.swing.*;
@@ -118,7 +119,16 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
                     ModuleSettingsPanel panel = module.getSettingsPanel();
 
                     if (panel != null) {
-                        panel.setVisible(true);
+                        // 关闭模块面板
+                        Main.getUi().setVisible(false);
+
+                        // 配置面板内容
+                        BackgroundFrame settings = Main.getSettings();
+                        settings.getContentPane().removeAll();
+                        settings.getContentPane().add(panel);
+
+                        // 显示模块配置面板
+                        settings.setVisible(true);
                     }
                 }
             }

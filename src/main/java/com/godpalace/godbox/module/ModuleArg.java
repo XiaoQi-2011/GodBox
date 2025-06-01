@@ -13,7 +13,7 @@ import java.io.Serializable;
 * value: 初始值，如: "Hello, World!"
 *
 * 可选字段:
-*   Integer, Long, Float, Double:
+*   Number:
 *   min: 最小值
 *   max: 最大值
 *   step: 步长
@@ -41,7 +41,7 @@ import java.io.Serializable;
 @Setter
 public class ModuleArg {
     private String name;
-    private Class<? extends Serializable> type;
+    private String type;
     private Serializable value;
 
     private Serializable min;

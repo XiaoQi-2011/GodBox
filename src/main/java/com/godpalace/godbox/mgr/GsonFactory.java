@@ -1,9 +1,13 @@
 package com.godpalace.godbox.mgr;
 
-import com.godpalace.godbox.module.ClassTypeAdapter;
+import com.godpalace.godbox.module.ModuleArg;
+import com.godpalace.godbox.module.ModuleArgTypeAdapter;
+import com.godpalace.godbox.module.SerializableTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
+
+import java.io.Serializable;
 
 public class GsonFactory {
     @Getter
@@ -11,7 +15,8 @@ public class GsonFactory {
 
     static {
         gson = new GsonBuilder()
-                .registerTypeAdapter(Class.class, new ClassTypeAdapter())
+                .registerTypeAdapter(ModuleArg.class, new ModuleArgTypeAdapter())
+                .registerTypeAdapter(Serializable.class, new SerializableTypeAdapter())
                 .create();
     }
 }

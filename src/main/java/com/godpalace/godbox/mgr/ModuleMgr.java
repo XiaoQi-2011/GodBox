@@ -39,7 +39,7 @@ public class ModuleMgr {
                 // 判断是否为edf文件
                 if (file.isFile() && file.getName().endsWith(".json")) {
                     Module module = Module.fromJsonFile(file);
-                    module.setExePath(file.getAbsolutePath().replace(".json", executableFileFormat));
+                    module.setExePath(file.getAbsolutePath().substring(0, file.getAbsolutePath().lastIndexOf(".")) + executableFileFormat);
 
                     // 判断是否存在对应的可执行文件
                     if (!new File(module.getExePath()).exists()) {

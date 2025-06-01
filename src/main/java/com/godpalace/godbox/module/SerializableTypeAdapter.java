@@ -10,42 +10,16 @@ import java.io.Serializable;
 public class SerializableTypeAdapter extends TypeAdapter<Serializable> {
     @Override
     public void write(JsonWriter jsonWriter, Serializable serializable) throws IOException {
-        if (serializable instanceof Integer) {
-            jsonWriter.value((int) serializable);
+        if (serializable == null) {
+            jsonWriter.nullValue();
             return;
         }
 
-        if (serializable instanceof String) {
-            jsonWriter.value((String) serializable);
-            return;
-        }
-
-        if (serializable instanceof Boolean) {
-            jsonWriter.value((boolean) serializable);
-            return;
-        }
-
-        if (serializable instanceof Double) {
-            jsonWriter.value((double) serializable);
-            return;
-        }
-
-        if (serializable instanceof Float) {
-            jsonWriter.value((float) serializable);
-            return;
-        }
-
-        if (serializable instanceof Long) {
-            jsonWriter.value((long) serializable);
-            return;
-        }
-
-        if (serializable instanceof Short) {
-            jsonWriter.value((short) serializable);
-        }
+        jsonWriter.value(serializable + "");
     }
 
     @Override
     public Serializable read(JsonReader jsonReader) throws IOException {
+        return jsonReader.nextString();
     }
 }

@@ -17,6 +17,12 @@ public class Main {
     @Getter
     private static final ConcurrentHashMap<TypeLists, TypeList> typeLists = new ConcurrentHashMap<>();
 
+    @Getter
+    private static final BackgroundFrame ui = new BackgroundFrame();
+
+    @Getter
+    private static final BackgroundFrame settings = new BackgroundFrame();
+
     static {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
@@ -34,9 +40,6 @@ public class Main {
             GlobalScreen.registerNativeHook();
             UiSettings.initialize();
             ModuleMgr.initialize();
-
-            // 创建UI
-            BackgroundFrame ui = new BackgroundFrame();
 
             // 创建类型列表
             for (TypeLists typeList : TypeLists.values()) {
