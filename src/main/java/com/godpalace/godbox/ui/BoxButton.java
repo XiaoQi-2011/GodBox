@@ -6,13 +6,13 @@ import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BoxButton extends JComponent implements MouseListener {
-    private static final Color defalutBackgroundColor = new Color(0, 0, 0, UiSettings.backgroundOpacity);
-
     @Setter
     @Getter
     private String text;
@@ -20,7 +20,7 @@ public class BoxButton extends JComponent implements MouseListener {
     private final AtomicBoolean isAction = new AtomicBoolean(false);
     private final AtomicBoolean isEnter = new AtomicBoolean(false);
 
-    private BoxButton(String text) {
+    public BoxButton(String text) {
         this.text = text;
 
         addMouseListener(this);
@@ -41,8 +41,16 @@ public class BoxButton extends JComponent implements MouseListener {
         // 画文字
         g.setColor(getTextColor());
         int x = (getWidth() - g.getFontMetrics().stringWidth(text)) / 2;
-        int y = (getHeight() - g.getFontMetrics().getAscent()) / 2;
+        int y = (getHeight() + g.getFontMetrics().getAscent()) / 2 - 1;
         g.drawString(text, x, y);
+    }
+
+    public void addActionListener(ActionListener listener) {
+        listenerList.add(ActionListener.class, listener);
+    }
+
+    public void removeActionListener(ActionListener listener) {
+        listenerList.remove(ActionListener.class, listener);
     }
 
     @Override
@@ -51,14 +59,27 @@ public class BoxButton extends JComponent implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        isAction.set(true);
-        repaint();
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            isAction.set(true);
+            repaint();
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        isAction.set(false);
-        repaint();
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            isAction.set(false);
+
+            if (isEnter.get()) {
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    for (ActionListener listener : listenerList.getListeners(ActionListener.class)) {
+                        listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, text));
+                    }
+                }
+            }
+
+            repaint();
+        }
     }
 
     @Override
@@ -82,11 +103,11 @@ public class BoxButton extends JComponent implements MouseListener {
             return UiSettings.themeColor.brighter();
         }
 
-        return defalutBackgroundColor;
+        return Color.BLACK;
     }
 
     private Color getTextColor() {
-        if (isAction.get()) {
+        if (isAction.get() || isEnter.get()) {
             return Color.WHITE;
         }
 

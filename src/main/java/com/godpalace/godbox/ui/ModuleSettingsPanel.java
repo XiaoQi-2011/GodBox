@@ -2,6 +2,7 @@ package com.godpalace.godbox.ui;
 
 import com.godpalace.godbox.Main;
 import com.godpalace.godbox.UiSettings;
+import com.godpalace.godbox.module.Module;
 import com.godpalace.godbox.module.ModuleArg;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,36 +13,32 @@ import java.awt.event.*;
 
 @Slf4j
 public class ModuleSettingsPanel extends BoxPanel implements MouseListener, MouseMotionListener {
-    private final ModuleArg[] args;
-    private final String moduleName;
-    private final String description;
+    private final Module module;
 
-    public ModuleSettingsPanel(String moduleName, String description, ModuleArg[] args) {
+    public ModuleSettingsPanel(Module module) {
         super();
-        this.args = args;
-        this.moduleName = moduleName;
-        this.description = description;
+        this.module = module;
 
         // 设置面板
         setLayout(new BorderLayout());
-        setSize(300, (args.length + 2) * (UiSettings.moduleHeight + 5) - 17);
+        setSize(300, (module.getArgs().length + 3) * (UiSettings.moduleHeight + 5) - 24);
         setBorder(new LineBorder(UiSettings.themeColor));
         setFocusable(true);
+        addMouseListener(this);
+        addMouseMotionListener(this);
         addKeyListener(new CloseKeyListener());
-
-        int x = (Toolkit.getDefaultToolkit().getScreenSize().width - getWidth()) / 2;
-        int y = (Toolkit.getDefaultToolkit().getScreenSize().height - getHeight()) / 2;
-        setLocation(x, y);
 
         initComponents();
         SwingUtilities.updateComponentTreeUI(this);
         requestFocus();
+
+        toCenter();
     }
 
     // 初始化配置面板
     private void initComponents() {
         // 添加标题
-        JLabel title = new JLabel(moduleName);
+        JLabel title = new JLabel(module.getDisplayName());
         title.setOpaque(true);
         title.setForeground(Color.WHITE);
         title.setBackground(UiSettings.themeColor);
@@ -49,7 +46,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         title.setFont(UiSettings.font.deriveFont(18.0f));
 
         // 添加描述
-        JLabel desc = new JLabel(description);
+        JLabel desc = new JLabel(module.getDescription());
         desc.setForeground(Color.WHITE);
         desc.setFont(UiSettings.font);
 
@@ -65,7 +62,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         centerPanel.setLayout(boxLayout);
 
         // 添加配置项
-        for (ModuleArg arg : args) {
+        for (ModuleArg arg : module.getArgs()) {
             JLabel label = new JLabel(arg.getName() + ":");
             label.setForeground(Color.WHITE);
             label.setFont(UiSettings.font);
@@ -290,6 +287,17 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         }
 
         add(centerPanel, BorderLayout.CENTER);
+
+        // 添加作者和版本信息
+        BoxSuperLink info = new BoxSuperLink("作者: " + module.getAuthor() + "  版本: " + module.getVersion(), module.getWebsite());
+        info.setFont(UiSettings.font.deriveFont(12.0f));
+        add(info, BorderLayout.SOUTH);
+    }
+
+    public void toCenter() {
+        int x = (Toolkit.getDefaultToolkit().getScreenSize().width - getWidth()) / 2;
+        int y = (Toolkit.getDefaultToolkit().getScreenSize().height - getHeight()) / 2;
+        setLocation(x, y);
     }
 
     @Override

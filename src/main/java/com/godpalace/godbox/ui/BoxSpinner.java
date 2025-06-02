@@ -19,7 +19,6 @@ public class BoxSpinner extends JSpinner {
         setForeground(Color.WHITE);
         setBackground(Color.BLACK);
         setBorder(new LineBorder(UiSettings.themeColor));
-        setOpaque(false);
     }
 
     @Override

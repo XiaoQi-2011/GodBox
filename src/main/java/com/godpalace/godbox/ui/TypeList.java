@@ -138,6 +138,7 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
                 // 打开模块配置面板
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     ModuleSettingsPanel panel = module.getSettingsPanel();
+                    panel.toCenter();
 
                     if (panel != null) {
                         // 配置面板内容

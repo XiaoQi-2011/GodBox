@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 
+@SuppressWarnings("unused")
 @Getter
 public class Module {
     public static Module fromJsonFile(File json) {
@@ -28,6 +29,7 @@ public class Module {
     private String description;
     private String version;
     private String author;
+    private String website;
 
     @Setter
     private transient String exePath;
