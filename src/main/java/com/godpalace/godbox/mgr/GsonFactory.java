@@ -15,6 +15,7 @@ public class GsonFactory {
 
     static {
         gson = new GsonBuilder()
+                .setPrettyPrinting()
                 .registerTypeAdapter(ModuleArg.class, new ModuleArgTypeAdapter())
                 .registerTypeAdapter(Serializable.class, new SerializableTypeAdapter())
                 .create();

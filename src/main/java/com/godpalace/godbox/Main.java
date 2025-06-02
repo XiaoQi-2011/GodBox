@@ -9,6 +9,8 @@ import com.godpalace.godbox.ui.TypeList;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,6 +37,25 @@ public class Main {
 
     public static void main(String[] args) {
         Locale.setDefault(Locale.CHINA);
+
+        ui.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    ui.setVisible(false);
+                }
+            }
+        });
+
+        settings.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    settings.setVisible(false);
+                    ui.setVisible(true);
+                }
+            }
+        });
 
         try {
             GlobalScreen.registerNativeHook();
@@ -69,7 +90,7 @@ public class Main {
                 @Override
                 public void nativeKeyReleased(NativeKeyEvent nativeEvent) {
                     // 右Shift键打开UI
-                    if (nativeEvent.getKeyCode() == UiSettings.openUiKey && !ui.isVisible()) {
+                    if (nativeEvent.getKeyCode() == UiSettings.openUiKey && !ui.isVisible() && !settings.isVisible()) {
                         ui.setVisible(true);
                     }
                 }

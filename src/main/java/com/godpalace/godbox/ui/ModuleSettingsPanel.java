@@ -23,11 +23,11 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         this.description = description;
 
         // 设置面板
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setSize(300, (args.length + 2) * UiSettings.moduleHeight);
+        setLayout(new BorderLayout());
+        setSize(300, (args.length + 2) * (UiSettings.moduleHeight + 5) - 17);
         setBorder(new LineBorder(UiSettings.themeColor));
         setFocusable(true);
-        addKeyListener(new KeyListener());
+        addKeyListener(new CloseKeyListener());
 
         int x = (Toolkit.getDefaultToolkit().getScreenSize().width - getWidth()) / 2;
         int y = (Toolkit.getDefaultToolkit().getScreenSize().height - getHeight()) / 2;
@@ -40,15 +40,39 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
     // 初始化配置面板
     private void initComponents() {
+        // 添加标题
+        JLabel title = new JLabel(moduleName);
+        title.setOpaque(true);
+        title.setForeground(Color.WHITE);
+        title.setBackground(UiSettings.themeColor);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        title.setFont(UiSettings.font.deriveFont(18.0f));
+
+        // 添加描述
+        JLabel desc = new JLabel(description);
+        desc.setForeground(Color.WHITE);
+        desc.setFont(UiSettings.font);
+
+        BoxPanel topPanel = new BoxPanel();
+        topPanel.setLayout(new BorderLayout());
+        topPanel.add(title, BorderLayout.CENTER);
+        topPanel.add(desc, BorderLayout.SOUTH);
+        add(topPanel, BorderLayout.NORTH);
+
+        // 设置布局
+        BoxPanel centerPanel = new BoxPanel();
+        BoxLayout boxLayout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
+        centerPanel.setLayout(boxLayout);
+
         // 添加配置项
         for (ModuleArg arg : args) {
             JLabel label = new JLabel(arg.getName() + ":");
-            //label.setColor(Color.WHITE);
+            label.setForeground(Color.WHITE);
+            label.setFont(UiSettings.font);
 
             JComponent input = switch (arg.getType()) {
                 case "string" -> {
-                    JTextField textField = new JTextField(arg.getValue() + "");
-                    textField.setFont(UiSettings.font);
+                    BoxTextField textField = new BoxTextField(arg.getValue() + "");
 
                     // 监听输入
                     textField.addActionListener(e -> arg.setValue(textField.getText()));
@@ -63,42 +87,13 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                 }
 
                 case "char" -> {
-                    BoxLabel keyLabel = new BoxLabel(arg.getValue() + "");
-                    keyLabel.setFocusable(true);
-                    keyLabel.setHasBorder(true);
-
-                    // 点击时开始监听
-                    keyLabel.addFocusListener(new FocusListener() {
-                        private String last = keyLabel.getText();
-
-                        @Override
-                        public void focusGained(FocusEvent e) {
-                            last = keyLabel.getText();
-                            keyLabel.setText("...");
-                        }
-
-                        @Override
-                        public void focusLost(FocusEvent e) {
-                            if (keyLabel.getText().equals("...")) {
-                                keyLabel.setText(last);
-                                last = "Null";
-                            }
-                        }
-                    });
+                    BoxCharSelector charSelector = new BoxCharSelector((arg.getValue() + "").charAt(0));
+                    charSelector.setPreferredSize(new Dimension(UiSettings.moduleHeight, UiSettings.moduleHeight));
 
                     // 监听输入
-                    keyLabel.addKeyListener(new KeyAdapter() {
-                        @Override
-                        public void keyTyped(KeyEvent e) {
-                            // 判断是否有焦点
-                            if (keyLabel.isFocusOwner()) {
-                                arg.setValue(e.getKeyChar());
-                                keyLabel.setText(e.getKeyChar() + "");
-                            }
-                        }
-                    });
+                    charSelector.addActionListener(e -> arg.setValue(charSelector.getC()));
 
-                    yield keyLabel;
+                    yield charSelector;
                 }
 
                 case "byte" -> {
@@ -108,12 +103,18 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             Byte.parseByte(arg.getMax() + ""),
                             Byte.parseByte(arg.getStep() + ""));
 
-                    JSpinner spinner = new JSpinner(model);
-                    spinner.setFont(UiSettings.font);
-                    spinner.setEditor(new JSpinner.NumberEditor(spinner, "#"));
+                    BoxSpinner spinner = new BoxSpinner(model);
+                    BoxSpinner.NumberEditor editor = new BoxSpinner.NumberEditor(spinner, "#0");
+                    spinner.setEditor(editor);
 
                     // 监听输入
-                    spinner.addChangeListener(e -> arg.setValue((byte) spinner.getValue()));
+                    editor.getTextField().addActionListener(e -> arg.setValue((byte) spinner.getValue()));
+                    editor.getTextField().addFocusListener(new FocusAdapter() {
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                            arg.setValue((byte) spinner.getValue());
+                        }
+                    });
 
                     yield spinner;
                 }
@@ -125,12 +126,18 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             Short.parseShort(arg.getMax() + ""),
                             Short.parseShort(arg.getStep() + ""));
 
-                    JSpinner spinner = new JSpinner(model);
-                    spinner.setFont(UiSettings.font);
-                    spinner.setEditor(new JSpinner.NumberEditor(spinner, "#"));
+                    BoxSpinner spinner = new BoxSpinner(model);
+                    BoxSpinner.NumberEditor editor = new BoxSpinner.NumberEditor(spinner, "#0");
+                    spinner.setEditor(editor);
 
                     // 监听输入
-                    spinner.addChangeListener(e -> arg.setValue((short) spinner.getValue()));
+                    editor.getTextField().addActionListener(e -> arg.setValue((short) spinner.getValue()));
+                    editor.getTextField().addFocusListener(new FocusAdapter() {
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                            arg.setValue((short) spinner.getValue());
+                        }
+                    });
 
                     yield spinner;
                 }
@@ -142,12 +149,18 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             Integer.parseInt(arg.getMax() + ""),
                             Integer.parseInt(arg.getStep() + ""));
 
-                    JSpinner spinner = new JSpinner(model);
-                    spinner.setFont(UiSettings.font);
-                    spinner.setEditor(new JSpinner.NumberEditor(spinner, "#"));
+                    BoxSpinner spinner = new BoxSpinner(model);
+                    BoxSpinner.NumberEditor editor = new BoxSpinner.NumberEditor(spinner, "#0");
+                    spinner.setEditor(editor);
 
                     // 监听输入
-                    spinner.addChangeListener(e -> arg.setValue((int) spinner.getValue()));
+                    editor.getTextField().addActionListener(e -> arg.setValue((int) spinner.getValue()));
+                    editor.getTextField().addFocusListener(new FocusAdapter() {
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                            arg.setValue((int) spinner.getValue());
+                        }
+                    });
 
                     yield spinner;
                 }
@@ -159,18 +172,24 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             Long.parseLong(arg.getMax() + ""),
                             Long.parseLong(arg.getStep() + ""));
 
-                    JSpinner spinner = new JSpinner(model);
-                    spinner.setFont(UiSettings.font);
-                    spinner.setEditor(new JSpinner.NumberEditor(spinner, "#"));
+                    BoxSpinner spinner = new BoxSpinner(model);
+                    BoxSpinner.NumberEditor editor = new BoxSpinner.NumberEditor(spinner, "#0");
+                    spinner.setEditor(editor);
 
                     // 监听输入
-                    spinner.addChangeListener(e -> arg.setValue((long) spinner.getValue()));
+                    editor.getTextField().addActionListener(e -> arg.setValue((long) spinner.getValue()));
+                    editor.getTextField().addFocusListener(new FocusAdapter() {
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                            arg.setValue((long) spinner.getValue());
+                        }
+                    });
 
                     yield spinner;
                 }
 
                 case "boolean" -> {
-                    JCheckBox checkbox = new JCheckBox();
+                    BoxCheckBox checkbox = new BoxCheckBox();
                     checkbox.setSelected(Boolean.parseBoolean(arg.getValue() + ""));
 
                     // 监听输入
@@ -189,12 +208,18 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                     // 格式化显示
                     String format = "#0." + "#".repeat(((String) arg.getStep()).length() - 2);
 
-                    JSpinner spinner = new JSpinner(model);
-                    spinner.setFont(UiSettings.font);
-                    spinner.setEditor(new JSpinner.NumberEditor(spinner, format));
+                    BoxSpinner spinner = new BoxSpinner(model);
+                    BoxSpinner.NumberEditor editor = new BoxSpinner.NumberEditor(spinner, format);
+                    spinner.setEditor(editor);
 
                     // 监听输入
-                    spinner.addChangeListener(e -> arg.setValue((float) spinner.getValue()));
+                    editor.getTextField().addActionListener(e -> arg.setValue((float) spinner.getValue()));
+                    editor.getTextField().addFocusListener(new FocusAdapter() {
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                            arg.setValue((float) spinner.getValue());
+                        }
+                    });
 
                     yield spinner;
                 }
@@ -209,12 +234,18 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                     // 格式化显示
                     String format = "#0." + "#".repeat(((String) arg.getStep()).length() - 2);
 
-                    JSpinner spinner = new JSpinner(model);
-                    spinner.setFont(UiSettings.font);
-                    spinner.setEditor(new JSpinner.NumberEditor(spinner, format));
+                    BoxSpinner spinner = new BoxSpinner(model);
+                    BoxSpinner.NumberEditor editor = new BoxSpinner.NumberEditor(spinner, format);
+                    spinner.setEditor(editor);
 
                     // 监听输入
-                    spinner.addChangeListener(e -> arg.setValue((double) spinner.getValue()));
+                    editor.getTextField().addActionListener(e -> arg.setValue((double) spinner.getValue()));
+                    editor.getTextField().addFocusListener(new FocusAdapter() {
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                            arg.setValue((double) spinner.getValue());
+                        }
+                    });
 
                     yield spinner;
                 }
@@ -222,8 +253,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                 default -> {
                     log.warn("Not support type: {}", arg.getType());
 
-                    JTextField textField = new JTextField(arg.getValue() + "");
-                    textField.setFont(UiSettings.font);
+                    BoxTextField textField = new BoxTextField(arg.getValue() + "");
 
                     // 监听输入
                     textField.addActionListener(e -> arg.setValue(textField.getText()));
@@ -240,17 +270,26 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
             input.setFont(UiSettings.font);
             input.setFocusable(true);
-            input.addKeyListener(new KeyListener());
+            input.addKeyListener(new CloseKeyListener());
+
+            if (input instanceof BoxSpinner boxSpinner) {
+                ((BoxSpinner.DefaultEditor) boxSpinner.getEditor()).getTextField().addKeyListener(new CloseKeyListener());
+            }
 
             // 创建面板
             BoxPanel panel = new BoxPanel();
-            panel.setLayout(new BorderLayout());
-
-            // 添加到面板中, 并添加到父面板中
+            panel.setLayout(new BorderLayout(10, 0));
+            
+            // 添加到面板中
             panel.add(label, BorderLayout.WEST);
-            panel.add(input, BorderLayout.EAST);
-            add(panel);
+            panel.add(input, (input instanceof JTextField ? BorderLayout.CENTER : BorderLayout.EAST));
+            
+            // 添加垂直间距
+            centerPanel.add(panel);
+            centerPanel.add(Box.createRigidArea(new Dimension(0, 5))); // 添加5像素的垂直间距
         }
+
+        add(centerPanel, BorderLayout.CENTER);
     }
 
     @Override
@@ -296,7 +335,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
     public void mouseMoved(MouseEvent e) {
     }
 
-    static class KeyListener extends KeyAdapter {
+    static class CloseKeyListener extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

@@ -26,15 +26,6 @@ public class BackgroundFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setFocusable(true);
 
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    setVisible(false);
-                }
-            }
-        });
-
         // 添加文字
         JLabel[] labels = new JLabel[texts.length];
         for (int i = 0; i < texts.length; i++) {

@@ -64,7 +64,7 @@ public class Module {
         File file = new File(path);
 
         try (FileWriter writer = new FileWriter(file)) {
-            writer.write(toString());
+            GsonFactory.getGson().toJson(this, writer);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

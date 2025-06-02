@@ -1,1 +1,33 @@
-{"display_name":"测试","description":"测试描述","version":"1.0.0","author":"测试作者","type":"TEST","enabled":true,"args":[{"name":"arg1","type":"string","value":"Helld!"},{"name":"arg2","type":"int","value":"124","min":"-2147483648","max":"2147483647","step":"1"},{"name":"arg3","type":"char","value":"g"},{"name":"arg4","type":"boolean","value":"true"}]}
+{
+  "display_name": "测试",
+  "description": "测试描述",
+  "version": "1.0.0",
+  "author": "测试作者",
+  "type": "TEST",
+  "enabled": true,
+  "args": [
+    {
+      "name": "arg1",
+      "type": "string",
+      "value": "Hello, World!"
+    },
+    {
+      "name": "arg2",
+      "type": "int",
+      "value": "1316135016",
+      "min": "-2147483648",
+      "max": "2147483647",
+      "step": "1"
+    },
+    {
+      "name": "arg3",
+      "type": "char",
+      "value": "G"
+    },
+    {
+      "name": "arg4",
+      "type": "boolean",
+      "value": "true"
+    }
+  ]
+}
