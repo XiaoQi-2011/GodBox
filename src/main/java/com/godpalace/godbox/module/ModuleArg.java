@@ -40,6 +40,17 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class ModuleArg {
+    public ModuleArg() {}
+
+    public ModuleArg(String name, String type, Serializable value, Serializable min, Serializable max, Serializable step) {
+        this.name = name;
+        this.type = type;
+        this.value = value;
+        this.min = min;
+        this.max = max;
+        this.step = step;
+    }
+
     private String name;
     private String type;
     private Serializable value;

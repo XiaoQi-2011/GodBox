@@ -18,9 +18,9 @@ public class ModuleArgTypeAdapter implements JsonSerializer<ModuleArg>, JsonDese
         // 可选属性
         // 如果是数字类型，则添加min, max和step属性
         if (ArgUtils.isNumber(moduleArg.getType())) {
-            jsonObject.addProperty("min", moduleArg.getMin() + "");
-            jsonObject.addProperty("max", moduleArg.getMax() + "");
-            jsonObject.addProperty("step", moduleArg.getStep() + "");
+            jsonObject.addProperty("min", String.valueOf(moduleArg.getMin()));
+            jsonObject.addProperty("max", String.valueOf(moduleArg.getMax()));
+            jsonObject.addProperty("step", String.valueOf(moduleArg.getStep()));
         }
 
         return jsonObject;

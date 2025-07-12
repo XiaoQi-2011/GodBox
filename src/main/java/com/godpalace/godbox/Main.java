@@ -4,6 +4,7 @@ import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.godpalace.godbox.mgr.ModuleMgr;
+import com.godpalace.godbox.module.modules.Module;
 import com.godpalace.godbox.ui.BackgroundFrame;
 import com.godpalace.godbox.ui.TypeList;
 import lombok.Getter;
@@ -68,7 +69,7 @@ public class Main {
             }
 
             // 添加模块
-            for (com.godpalace.godbox.module.Module module : ModuleMgr.getModules()) {
+            for (Module module : ModuleMgr.getModules()) {
                 TypeLists typeList = TypeLists.valueOf(module.getTypeListName());
 
                 if (typeLists.containsKey(typeList)) {

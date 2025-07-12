@@ -1,12 +1,9 @@
 package com.godpalace.godbox.ui;
 
-import com.godpalace.godbox.Main;
 import com.godpalace.godbox.UiSettings;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class BackgroundFrame extends JFrame {
     private static final String[] texts = {

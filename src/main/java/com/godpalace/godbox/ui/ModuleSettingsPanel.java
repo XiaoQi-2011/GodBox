@@ -2,7 +2,7 @@ package com.godpalace.godbox.ui;
 
 import com.godpalace.godbox.Main;
 import com.godpalace.godbox.UiSettings;
-import com.godpalace.godbox.module.Module;
+import com.godpalace.godbox.module.modules.Module;
 import com.godpalace.godbox.module.ModuleArg;
 import lombok.extern.slf4j.Slf4j;
 
@@ -105,11 +105,11 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                     spinner.setEditor(editor);
 
                     // 监听输入
-                    editor.getTextField().addActionListener(e -> arg.setValue((byte) spinner.getValue()));
+                    editor.getTextField().addActionListener(e -> arg.setValue(Byte.parseByte(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
-                            arg.setValue((byte) spinner.getValue());
+                            arg.setValue(Byte.parseByte(editor.getTextField().getText()));
                         }
                     });
 
@@ -128,11 +128,11 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                     spinner.setEditor(editor);
 
                     // 监听输入
-                    editor.getTextField().addActionListener(e -> arg.setValue((short) spinner.getValue()));
+                    editor.getTextField().addActionListener(e -> arg.setValue(Short.parseShort(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
-                            arg.setValue((short) spinner.getValue());
+                            arg.setValue(Short.parseShort(editor.getTextField().getText()));
                         }
                     });
 
@@ -151,11 +151,11 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                     spinner.setEditor(editor);
 
                     // 监听输入
-                    editor.getTextField().addActionListener(e -> arg.setValue((int) spinner.getValue()));
+                    editor.getTextField().addActionListener(e -> arg.setValue(Integer.parseInt(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
-                            arg.setValue((int) spinner.getValue());
+                            arg.setValue(Integer.parseInt(editor.getTextField().getText()));
                         }
                     });
 
@@ -174,11 +174,11 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                     spinner.setEditor(editor);
 
                     // 监听输入
-                    editor.getTextField().addActionListener(e -> arg.setValue((long) spinner.getValue()));
+                    editor.getTextField().addActionListener(e -> arg.setValue(Long.parseLong(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
-                            arg.setValue((long) spinner.getValue());
+                            arg.setValue(Long.parseLong(editor.getTextField().getText()));
                         }
                     });
 
@@ -203,18 +203,18 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             Float.parseFloat(arg.getStep() + ""));
 
                     // 格式化显示
-                    String format = "#0." + "#".repeat(((String) arg.getStep()).length() - 2);
+                    String format = "#0." + "#".repeat((String.valueOf(arg.getStep())).length() - 2);
 
                     BoxSpinner spinner = new BoxSpinner(model);
                     BoxSpinner.NumberEditor editor = new BoxSpinner.NumberEditor(spinner, format);
                     spinner.setEditor(editor);
 
                     // 监听输入
-                    editor.getTextField().addActionListener(e -> arg.setValue((float) spinner.getValue()));
+                    editor.getTextField().addActionListener(e -> arg.setValue(Float.parseFloat(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
-                            arg.setValue((float) spinner.getValue());
+                            arg.setValue(Float.parseFloat(editor.getTextField().getText()));
                         }
                     });
 
@@ -229,18 +229,18 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             Double.parseDouble(arg.getStep() + ""));
 
                     // 格式化显示
-                    String format = "#0." + "#".repeat(((String) arg.getStep()).length() - 2);
+                    String format = "#0." + "#".repeat((String.valueOf(arg.getStep())).length() - 2);
 
                     BoxSpinner spinner = new BoxSpinner(model);
                     BoxSpinner.NumberEditor editor = new BoxSpinner.NumberEditor(spinner, format);
                     spinner.setEditor(editor);
 
                     // 监听输入
-                    editor.getTextField().addActionListener(e -> arg.setValue((double) spinner.getValue()));
+                    editor.getTextField().addActionListener(e -> arg.setValue(Double.parseDouble(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
-                            arg.setValue((double) spinner.getValue());
+                            arg.setValue(Double.parseDouble(editor.getTextField().getText()));
                         }
                     });
 

@@ -17,7 +17,7 @@ public class UiSettings {
     public static int backgroundOpacity = 50;
 
     @Data
-    public static Color themeColor = new Color(255, 80, 80);
+    public static Color themeColor = new Color(118, 80, 255);
 
     @Data
     public static Font font = new Font("宋体", Font.PLAIN, 14);
