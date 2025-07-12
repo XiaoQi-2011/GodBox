@@ -10,20 +10,21 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 public class TestModule implements Module {
     @Setter
-    private transient ModuleSettingsPanel settingsPanel;
+    private ModuleSettingsPanel settingsPanel;
 
     @Setter
-    private transient boolean entered;
-
-    @SerializedName("enabled")
+    private boolean entered;
     private boolean enabled;
 
-    private transient final String displayName = "测试";
-    private transient final String description = "这是一个测试插件";
-    private transient final String version = "v1.0";
-    private transient final String author = "XiaoQi";
-    private transient final String website = "https://www.example.com";
-    private transient final String typeListName = "TEST";
+    @Setter
+    private String keyBind = "None";
+
+    private final String displayName = "测试";
+    private final String description = "这是一个测试插件";
+    private final String version = "v1.0";
+    private final String author = "XiaoQi";
+    private final String website = "https://www.example.com";
+    private final String typeListName = "TEST";
 
     @Setter
     private ModuleArg[] args = new ModuleArg[]{

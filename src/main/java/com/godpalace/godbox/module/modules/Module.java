@@ -21,6 +21,10 @@ public interface Module {
 
     boolean isEnabled();
 
+    // 按键绑定
+    String getKeyBind();
+    void setKeyBind(String bindKey);
+
     // 判断鼠标是否进入
     boolean isEntered();
     void setEntered(boolean entered);

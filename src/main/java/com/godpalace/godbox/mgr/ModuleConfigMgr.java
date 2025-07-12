@@ -28,7 +28,11 @@ public class ModuleConfigMgr {
     public void save() {
         configs.clear();
         for (Module module : modules) {
-            Config config = new Config(module.getDisplayName(), module.getArgs(), module.isEnabled());
+            Config config = new Config(
+                    module.getDisplayName(),
+                    module.getArgs(),
+                    module.isEnabled(),
+                    module.getKeyBind());
             configs.add(config);
         }
         try {
@@ -61,6 +65,7 @@ public class ModuleConfigMgr {
             }
 
             module.setArgs(config.value);
+            module.setKeyBind(config.keyBind);
             if (config.enabled) {
                 module.Enable();
             } else {
@@ -71,13 +76,15 @@ public class ModuleConfigMgr {
 
     public static class Config {
         private final String name;
-        private final ModuleArg[] value;
         private final boolean enabled;
+        private final String keyBind;
+        private final ModuleArg[] value;
 
-        public Config(String name, ModuleArg[] value, boolean enabled) {
+        public Config(String name, ModuleArg[] value, boolean enabled, String keyBind) {
             this.name = name;
             this.value = value;
             this.enabled = enabled;
+            this.keyBind = keyBind;
         }
     }
 }

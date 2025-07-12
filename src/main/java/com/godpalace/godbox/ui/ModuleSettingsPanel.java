@@ -21,7 +21,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
         // 设置面板
         setLayout(new BorderLayout());
-        setSize(300, (module.getArgs().length + 3) * (UiSettings.moduleHeight + 5) - 24);
+        setSize(300, (module.getArgs().length + 4) * (UiSettings.moduleHeight + 5) - 24);
         setBorder(new LineBorder(UiSettings.themeColor));
         setFocusable(true);
         addMouseListener(this);
@@ -286,6 +286,30 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
             centerPanel.add(Box.createRigidArea(new Dimension(0, 5))); // 添加5像素的垂直间距
         }
 
+        // 添加按键绑定
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        KeyBindField keyBindField = new KeyBindField(module.getKeyBind());
+        if (module.getKeyBind() == null || module.getKeyBind().isEmpty()) {
+            keyBindField.setKeyBind("None");
+        }
+        keyBindField.addActionListener(e -> module.setKeyBind(keyBindField.getKeyBind()));
+        keyBindField.setFocusable(true);
+
+        BoxPanel panel = new BoxPanel();
+        panel.setLayout(new BorderLayout(10, 0));
+
+        JLabel label = new JLabel("按键绑定:");
+        label.setForeground(Color.WHITE);
+        label.setFont(UiSettings.font);
+
+        panel.add(label, BorderLayout.WEST);
+        panel.add(keyBindField, BorderLayout.CENTER);
+
+        centerPanel.add(panel);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 5))); // 添加5像素的垂直间距
+
+        // 添加到面板中
         add(centerPanel, BorderLayout.CENTER);
 
         // 添加作者和版本信息
