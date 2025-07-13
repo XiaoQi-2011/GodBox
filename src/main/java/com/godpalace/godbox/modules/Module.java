@@ -1,13 +1,8 @@
-package com.godpalace.godbox.module.modules;
+package com.godpalace.godbox.modules;
 
 import com.godpalace.godbox.mgr.GsonFactory;
-import com.godpalace.godbox.module.ModuleArg;
+import com.godpalace.godbox.module_mgr.ModuleArg;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
-import com.google.gson.annotations.SerializedName;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 
 public interface Module {
 

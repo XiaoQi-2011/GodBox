@@ -7,8 +7,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.godpalace.godbox.module.ModuleArg;
-import com.godpalace.godbox.module.modules.Module;
+import com.godpalace.godbox.module_mgr.ModuleArg;
+import com.godpalace.godbox.modules.Module;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 

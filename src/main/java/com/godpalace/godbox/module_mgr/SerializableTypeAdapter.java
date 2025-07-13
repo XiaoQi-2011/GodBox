@@ -1,4 +1,4 @@
-package com.godpalace.godbox.module;
+package com.godpalace.godbox.module_mgr;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

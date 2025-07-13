@@ -1,8 +1,8 @@
 package com.godpalace.godbox.mgr;
 
-import com.godpalace.godbox.module.ModuleArg;
-import com.godpalace.godbox.module.ModuleArgTypeAdapter;
-import com.godpalace.godbox.module.SerializableTypeAdapter;
+import com.godpalace.godbox.module_mgr.ModuleArg;
+import com.godpalace.godbox.module_mgr.ModuleArgTypeAdapter;
+import com.godpalace.godbox.module_mgr.SerializableTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;

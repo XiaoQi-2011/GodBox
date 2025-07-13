@@ -10,7 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
-import com.godpalace.godbox.module.modules.Module;
+import com.godpalace.godbox.modules.Module;
 
 public class TypeList extends JComponent implements MouseListener, MouseMotionListener {
     private static final Color DISABLED_COLOR = new Color(25, 25, 25);
@@ -140,18 +140,16 @@ public class TypeList extends JComponent implements MouseListener, MouseMotionLi
                     ModuleSettingsPanel panel = module.getSettingsPanel();
                     panel.toCenter();
 
-                    if (panel != null) {
-                        // 配置面板内容
-                        BackgroundFrame settings = Main.getSettings();
-                        settings.getContentPane().removeAll();
-                        settings.getContentPane().add(panel);
+                    // 配置面板内容
+                    BackgroundFrame settings = Main.getSettings();
+                    settings.getContentPane().removeAll();
+                    settings.getContentPane().add(panel);
 
-                        // 显示模块配置面板
-                        settings.setVisible(true);
+                    // 显示模块配置面板
+                    settings.setVisible(true);
 
-                        // 关闭模块面板
-                        Main.getUi().setVisible(false);
-                    }
+                    // 关闭模块面板
+                    Main.getUi().setVisible(false);
                 }
             }
 

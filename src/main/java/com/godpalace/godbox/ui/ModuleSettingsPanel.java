@@ -2,14 +2,18 @@ package com.godpalace.godbox.ui;
 
 import com.godpalace.godbox.Main;
 import com.godpalace.godbox.UiSettings;
-import com.godpalace.godbox.module.modules.Module;
-import com.godpalace.godbox.module.ModuleArg;
+import com.godpalace.godbox.modules.Module;
+import com.godpalace.godbox.module_mgr.ModuleArg;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 @Slf4j
 public class ModuleSettingsPanel extends BoxPanel implements MouseListener, MouseMotionListener {
@@ -247,6 +251,57 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                     yield spinner;
                 }
 
+                case "enum" -> {
+                    String serializableString = String.valueOf(arg.getValue());
+                    BoxComboBox.BoxEnum boxEnum = new BoxComboBox.BoxEnum(serializableString);
+                    BoxComboBox comboBox = new BoxComboBox(boxEnum);
+                    comboBox.setSelectedIndex(boxEnum.getSelectedIndex());
+                    comboBox.setBackground(getBackground());
+
+                    // 监听输入
+                    comboBox.addItemListener(e -> {
+                        if (e.getStateChange() == ItemEvent.SELECTED) {
+                            boxEnum.setSelectedItem(e.getItem().toString());
+                            arg.setValue(boxEnum.toSerializableString());
+                            comboBox.setFocusable(false);
+                        }
+                    });
+
+                    yield comboBox;
+                }
+
+                case "file" -> {
+                    BoxFileChooser fileChooser = new BoxFileChooser(String.valueOf(arg.getValue()));
+
+                    // 监听输入
+                    fileChooser.getTextField().addActionListener(e -> arg.setValue(fileChooser.getSelectedFile()));
+                    fileChooser.getTextField().addFocusListener(new FocusAdapter() {
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                            arg.setValue(fileChooser.getSelectedFile());
+                        }
+                    });
+
+                    yield fileChooser;
+                }
+
+                case "color" -> {
+                    BoxColorChooser colorChooser = new BoxColorChooser(new Color(Integer.parseInt(arg.getValue().toString())));
+
+                    // 监听输入
+                    colorChooser.getColorButton().addActionListener(e -> {
+                        Color color = colorChooser.getColor();
+                        Color newColor = JColorChooser.showDialog(this, "Choose Color", color);
+                        if (newColor!= null) {
+                            colorChooser.setColor(newColor);
+                            colorChooser.getColorPanel().setBackground(newColor);
+                        }
+                        arg.setValue(color.getRGB());
+                    });
+
+                    yield colorChooser;
+                }
+
                 default -> {
                     log.warn("Not support type: {}", arg.getType());
 
@@ -279,7 +334,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
             
             // 添加到面板中
             panel.add(label, BorderLayout.WEST);
-            panel.add(input, (input instanceof JTextField ? BorderLayout.CENTER : BorderLayout.EAST));
+            panel.add(input, (input instanceof JTextField || input instanceof JPanel)? BorderLayout.CENTER : BorderLayout.EAST);
             
             // 添加垂直间距
             centerPanel.add(panel);

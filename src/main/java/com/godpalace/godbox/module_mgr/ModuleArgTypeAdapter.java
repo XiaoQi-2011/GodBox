@@ -1,4 +1,4 @@
-package com.godpalace.godbox.module;
+package com.godpalace.godbox.module_mgr;
 
 import com.godpalace.godbox.util.ArgUtils;
 import com.google.gson.*;

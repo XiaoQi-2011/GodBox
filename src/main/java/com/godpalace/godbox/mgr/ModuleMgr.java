@@ -1,21 +1,13 @@
 package com.godpalace.godbox.mgr;
 
 import com.godpalace.godbox.TypeLists;
-import com.godpalace.godbox.module.ModuleArg;
-import com.godpalace.godbox.module.modules.Module;
+import com.godpalace.godbox.modules.Module;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
 import com.godpalace.godbox.util.PackageUtil;
-import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -33,7 +25,7 @@ public class ModuleMgr {
         moduleConfigMgr.init(CONFIG_FILE_PATH, modules);
 
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        List<String> classes = PackageUtil.getClassName("com.godpalace.godbox.module.modules");
+        List<String> classes = PackageUtil.getClassName("com.godpalace.godbox.modules");
         for (String classPath : classes) {
             String className = classPath.substring(classPath.lastIndexOf(".") + 1);
             if (className.equals("Module")) continue;
