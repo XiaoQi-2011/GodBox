@@ -8,9 +8,6 @@ public interface Module {
 
     String getDisplayName();
     String getDescription();
-    String getVersion();
-    String getAuthor();
-    String getWebsite();
 
     String getTypeListName();
 

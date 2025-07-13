@@ -96,6 +96,7 @@ public class Main {
                     }
                 }
             });
+            ui.setVisible(true);
 
             log.info("GodBox started successfully");
         } catch (Exception e) {

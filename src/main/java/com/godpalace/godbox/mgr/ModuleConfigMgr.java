@@ -45,6 +45,7 @@ public class ModuleConfigMgr {
     }
 
     public void load() {
+        long run_time = System.currentTimeMillis();
         try {
             FileReader reader = new FileReader(configFileName);
             Type type = new TypeToken<List<Config>>() {}.getType();
@@ -64,7 +65,14 @@ public class ModuleConfigMgr {
                 continue;
             }
 
-            module.setArgs(config.value);
+            for (ModuleArg arg : config.value) {
+                for (ModuleArg arg2 : module.getArgs()) {
+                    if (arg2.getName().equals(arg.getName())) {
+                        arg2.setValue(arg.getValue());
+                        break;
+                    }
+                }
+            }
             module.setKeyBind(config.keyBind);
             if (config.enabled) {
                 module.Enable();
@@ -72,6 +80,7 @@ public class ModuleConfigMgr {
                 module.Disable();
             }
         }
+        log.info("Config load time: {}ms", System.currentTimeMillis() - run_time);
     }
 
     public static class Config {

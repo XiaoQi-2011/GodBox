@@ -18,6 +18,9 @@ public class KeyBindField extends JComponent {
         @Override
         public void keyPressed(KeyEvent e) {
             String s = KeyEvent.getKeyText(e.getKeyCode());
+            if (s.equals("Esc")) {
+                s = "None";
+            }
 
             boolean isCtrl = e.isControlDown();
             boolean isAlt = e.isAltDown();

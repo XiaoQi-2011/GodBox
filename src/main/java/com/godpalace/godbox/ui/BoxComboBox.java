@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.io.Serial;
@@ -69,7 +71,6 @@ public class BoxComboBox extends JComboBox<String> {
             for (int i = 0; i < items.length; i++) {
                 if (items[i].equals(selectedItem)) {
                     selectedIndex = i;
-                    System.out.println(selectedIndex);
                     break;
                 }
             }

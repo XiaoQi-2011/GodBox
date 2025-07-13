@@ -65,6 +65,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         BoxLayout boxLayout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
         centerPanel.setLayout(boxLayout);
 
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         // 添加配置项
         for (ModuleArg arg : module.getArgs()) {
             JLabel label = new JLabel(arg.getName() + ":");
@@ -362,15 +363,8 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         panel.add(keyBindField, BorderLayout.CENTER);
 
         centerPanel.add(panel);
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 5))); // 添加5像素的垂直间距
-
         // 添加到面板中
         add(centerPanel, BorderLayout.CENTER);
-
-        // 添加作者和版本信息
-        BoxSuperLink info = new BoxSuperLink("作者: " + module.getAuthor() + "  版本: " + module.getVersion(), module.getWebsite());
-        info.setFont(UiSettings.font.deriveFont(12.0f));
-        add(info, BorderLayout.SOUTH);
     }
 
     public void toCenter() {

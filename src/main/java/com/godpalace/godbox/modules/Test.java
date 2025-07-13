@@ -23,9 +23,6 @@ public class Test implements Module {
 
     private final String displayName = "测试";
     private final String description = "这是一个测试插件";
-    private final String version = "v1.0";
-    private final String author = "XiaoQi";
-    private final String website = "https://www.example.com";
     private final String typeListName = "TEST";
 
     private final BoxComboBox.BoxEnum ArgType = new BoxComboBox.BoxEnum(new String[]{

@@ -1,6 +1,7 @@
 package com.godpalace.godbox.ui;
 
 import com.godpalace.godbox.UiSettings;
+import com.godpalace.godbox.mgr.ModuleMgr;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,6 +34,7 @@ public class BoxFileChooser extends BoxPanel {
                 textField.setText(fileChooser.getSelectedFile().getAbsolutePath());
             }
         });
+        textField.addKeyListener(new ModuleSettingsPanel.CloseKeyListener());
     }
 
     public String getSelectedFile() {
