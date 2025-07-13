@@ -295,8 +295,8 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                         if (newColor!= null) {
                             colorChooser.setColor(newColor);
                             colorChooser.getColorPanel().setBackground(newColor);
+                            arg.setValue(newColor.getRGB());
                         }
-                        arg.setValue(color.getRGB());
                     });
 
                     yield colorChooser;
