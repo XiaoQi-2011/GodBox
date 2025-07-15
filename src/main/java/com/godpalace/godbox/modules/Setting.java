@@ -1,6 +1,7 @@
 package com.godpalace.godbox.modules;
 
 import com.godpalace.godbox.UiSettings;
+import com.godpalace.godbox.module_mgr.Module;
 import com.godpalace.godbox.module_mgr.ModuleArg;
 import com.godpalace.godbox.ui.BoxComboBox;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;

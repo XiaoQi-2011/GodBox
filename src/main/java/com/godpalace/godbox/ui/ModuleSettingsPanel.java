@@ -2,19 +2,14 @@ package com.godpalace.godbox.ui;
 
 import com.godpalace.godbox.Main;
 import com.godpalace.godbox.UiSettings;
-import com.godpalace.godbox.modules.Module;
+import com.godpalace.godbox.module_mgr.Module;
 import com.godpalace.godbox.module_mgr.ModuleArg;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 
 @Slf4j
 public class ModuleSettingsPanel extends BoxPanel implements MouseListener, MouseMotionListener {

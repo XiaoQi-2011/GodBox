@@ -1,16 +1,11 @@
 package com.godpalace.godbox.modules;
 
+import com.godpalace.godbox.module_mgr.Module;
 import com.godpalace.godbox.module_mgr.ModuleArg;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
-import com.godpalace.godbox.util.CharToStringUtil;
-import com.sun.jna.platform.win32.Kernel32;
-import com.sun.jna.platform.win32.Tlhelp32;
-import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinNT;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter

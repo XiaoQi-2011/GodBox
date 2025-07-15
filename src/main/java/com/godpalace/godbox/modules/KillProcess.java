@@ -1,5 +1,6 @@
 package com.godpalace.godbox.modules;
 
+import com.godpalace.godbox.module_mgr.Module;
 import com.godpalace.godbox.module_mgr.ModuleArg;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
 import com.godpalace.godbox.util.CharToStringUtil;
@@ -11,8 +12,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter

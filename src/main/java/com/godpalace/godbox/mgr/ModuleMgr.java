@@ -1,7 +1,7 @@
 package com.godpalace.godbox.mgr;
 
 import com.godpalace.godbox.TypeLists;
-import com.godpalace.godbox.modules.Module;
+import com.godpalace.godbox.module_mgr.Module;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
 import com.godpalace.godbox.util.PackageUtil;
 import lombok.Getter;

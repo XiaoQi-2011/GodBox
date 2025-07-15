@@ -10,7 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
-import com.godpalace.godbox.modules.Module;
+import com.godpalace.godbox.module_mgr.Module;
 
 public class TypeList extends JComponent implements MouseListener, MouseMotionListener {
     private static final Color DISABLED_COLOR = new Color(35, 35, 35);
