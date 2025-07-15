@@ -25,7 +25,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
         // 设置面板
         setLayout(new BorderLayout());
-        setSize(300, (module.getArgs().length + 4) * (UiSettings.moduleHeight + 5) - 24);
+        setSize(400, (module.getArgs().length + 4) * (UiSettings.moduleHeight + 5) - 24);
         setBorder(new LineBorder(UiSettings.themeColor));
         setFocusable(true);
         addMouseListener(this);
@@ -86,6 +86,21 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                     });
 
                     yield textField;
+                }
+
+                case "long-string" -> {
+                    BoxTextArea textArea = new BoxTextArea(arg.getValue() + "");
+
+                    // 监听输入
+                    textArea.addCaretListener(e -> arg.setValue(textArea.getText()));
+                    textArea.addFocusListener(new FocusAdapter() {
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                            arg.setValue(textArea.getText());
+                        }
+                    });
+
+                    yield textArea;
                 }
 
                 case "char" -> {

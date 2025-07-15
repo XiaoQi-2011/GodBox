@@ -13,7 +13,7 @@ import java.util.List;
 import com.godpalace.godbox.modules.Module;
 
 public class TypeList extends JComponent implements MouseListener, MouseMotionListener {
-    private static final Color DISABLED_COLOR = new Color(25, 25, 25);
+    private static final Color DISABLED_COLOR = new Color(35, 35, 35);
     private static final Color ENTERED_COLOR = new Color(80, 80, 80);
 
     private final String typeName;

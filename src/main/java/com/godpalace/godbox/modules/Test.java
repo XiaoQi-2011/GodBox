@@ -33,6 +33,7 @@ public class Test implements Module {
     private ModuleArg[] args = new ModuleArg[]{
             new ModuleArg("int", "int", 40, -2147483648, 2147483647, 1),
             new ModuleArg("string", "string", "hello", "", "", ""),
+            new ModuleArg("long-string", "long-string", "hello\nworld", "", "", ""),
             new ModuleArg("boolean", "boolean", true, "", "", ""),
             new ModuleArg("float", "float", 1.0f, -2147483648.0f, 2147483647.0f, 0.1f),
             new ModuleArg("double", "double", 1.0, -2147483648.0, 2147483647.0, 0.1),

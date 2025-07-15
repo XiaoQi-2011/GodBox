@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -34,12 +35,14 @@ public class KillProcess implements Module {
             new ModuleArg("进程名", "string", "", "", "", ""),
             new ModuleArg("杀死全部进程", "boolean", false, "", "", ""),
             new ModuleArg("忽略自己", "boolean", true, "", "", ""),
-            new ModuleArg("是否循环", "boolean", true, "", "", "")
+            new ModuleArg("是否循环", "boolean", true, "", "", ""),
+            new ModuleArg("是否强制杀死", "boolean", false, "", "", "")
     };
 
     private boolean killAll = false;
     private boolean ignoreSelf = true;
     private boolean loop = true;
+    private boolean force = false;
 
     Thread thread = new Thread(() -> {
         while (true) {
@@ -48,7 +51,7 @@ public class KillProcess implements Module {
                 String processName = args[0].getValue().toString();
                 if (!killAll) {
                     try {
-                        Runtime.getRuntime().exec("taskkill /f /im " + processName);
+                        Runtime.getRuntime().exec("taskkill " + (force? "/f " : "") + " /im " + processName);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -60,11 +63,11 @@ public class KillProcess implements Module {
                     Kernel32.INSTANCE.Process32First(snapshot, processEntry);
                     do {
                         int pid = processEntry.th32ProcessID.intValue();
-                        if (ignoreSelf && pid == currentProcessId && pid < 1000) {
-                            continue;
-                        }
+                        String name = Arrays.toString(processEntry.szExeFile);
+                        if (ignoreSelf && pid == currentProcessId) continue;
+                        if (pid <= 1000 || name.equals("svchost.exe")) continue;
                         try {
-                            Runtime.getRuntime().exec("taskkill /pid " + pid);
+                            Runtime.getRuntime().exec("taskkill " + (force? "/f " : "") + " /pid " + pid);
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
@@ -77,7 +80,7 @@ public class KillProcess implements Module {
                 }
             }
             try {
-                Thread.sleep(50);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -94,6 +97,7 @@ public class KillProcess implements Module {
         killAll = Boolean.parseBoolean(args[1].getValue().toString());
         ignoreSelf = Boolean.parseBoolean(args[2].getValue().toString());
         loop = Boolean.parseBoolean(args[3].getValue().toString());
+        force = Boolean.parseBoolean(args[4].getValue().toString());
 
         if (!thread.isAlive()) {
             thread.start();
