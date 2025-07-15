@@ -25,6 +25,9 @@ public class UiSettings {
     @Data
     public static int moduleHeight = 20;
 
+    @Data
+    public static boolean keyBindEnabled = true;
+
     public static void initialize() {
         try {
             FileDatabaseEngine.init(UiSettings.class, null);

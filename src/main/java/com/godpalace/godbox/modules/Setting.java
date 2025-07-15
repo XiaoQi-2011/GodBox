@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.io.File;
 
 @Getter
 public class Setting implements Module {
@@ -24,7 +22,7 @@ public class Setting implements Module {
     private String keyBind = "None";
 
     private final String displayName = "设置";
-    private final String description = "设置UI";
+    private final String description = "设置模块的相关设置";
     private final String typeListName = "SETTINGS";
 
     private final BoxComboBox.BoxEnum ArgType = new BoxComboBox.BoxEnum(
@@ -32,21 +30,14 @@ public class Setting implements Module {
 
     @Setter
     private ModuleArg[] args = new ModuleArg[]{
-            new ModuleArg("背景透明度", "int", UiSettings.backgroundOpacity, 0, 255, 1),
-            new ModuleArg("主题颜色", "color", UiSettings.themeColor.getRGB(), "", "", ""),
-            new ModuleArg("字体", "enum", ArgType.toSerializableString(), "", "", ""),
-            new ModuleArg("模块高度", "int", UiSettings.moduleHeight, 0, 100, 1)
+            new ModuleArg("是否启用快捷键", "boolean", true, "", "", ""),
     };
 
 
     @Override
     public void Enable() {
         enabled = true;
-        ArgType.serialize(args[2].getValue().toString());
-        UiSettings.backgroundOpacity = Integer.parseInt(args[0].getValue().toString());
-        UiSettings.themeColor = new Color(Integer.parseInt(args[1].getValue().toString()));
-        UiSettings.moduleHeight = Integer.parseInt(args[3].getValue().toString());
-        UiSettings.font = new Font(ArgType.getSelectedItem(), Font.PLAIN, 14);
+        UiSettings.keyBindEnabled = Boolean.parseBoolean(args[0].getValue().toString());
     }
 
     @Override

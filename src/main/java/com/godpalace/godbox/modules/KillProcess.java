@@ -2,6 +2,7 @@ package com.godpalace.godbox.modules;
 
 import com.godpalace.godbox.module_mgr.ModuleArg;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
+import com.godpalace.godbox.util.CharToStringUtil;
 import com.sun.jna.platform.win32.Kernel32;
 import com.sun.jna.platform.win32.Tlhelp32;
 import com.sun.jna.platform.win32.WinDef;
@@ -35,12 +36,14 @@ public class KillProcess implements Module {
             new ModuleArg("进程名", "string", "", "", "", ""),
             new ModuleArg("杀死全部进程", "boolean", false, "", "", ""),
             new ModuleArg("忽略自己", "boolean", true, "", "", ""),
+            new ModuleArg("忽略系统进程", "boolean", true, "", "", ""),
             new ModuleArg("是否循环", "boolean", true, "", "", ""),
             new ModuleArg("是否强制杀死", "boolean", false, "", "", "")
     };
 
     private boolean killAll = false;
     private boolean ignoreSelf = true;
+    private boolean ignoreSystem = true;
     private boolean loop = true;
     private boolean force = false;
 
@@ -63,9 +66,11 @@ public class KillProcess implements Module {
                     Kernel32.INSTANCE.Process32First(snapshot, processEntry);
                     do {
                         int pid = processEntry.th32ProcessID.intValue();
-                        String name = Arrays.toString(processEntry.szExeFile);
+                        String name = CharToStringUtil.charToString(processEntry.szExeFile);
+
                         if (ignoreSelf && pid == currentProcessId) continue;
-                        if (pid <= 1000 || name.equals("svchost.exe")) continue;
+                        if (pid <= 1000 || name.equals("svchost.exe") && ignoreSystem) continue;
+
                         try {
                             Runtime.getRuntime().exec("taskkill " + (force? "/f " : "") + " /pid " + pid);
                         } catch (Exception e) {
@@ -80,7 +85,7 @@ public class KillProcess implements Module {
                 }
             }
             try {
-                Thread.sleep(10);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -96,8 +101,9 @@ public class KillProcess implements Module {
     public void Enable() {
         killAll = Boolean.parseBoolean(args[1].getValue().toString());
         ignoreSelf = Boolean.parseBoolean(args[2].getValue().toString());
-        loop = Boolean.parseBoolean(args[3].getValue().toString());
-        force = Boolean.parseBoolean(args[4].getValue().toString());
+        ignoreSystem = Boolean.parseBoolean(args[3].getValue().toString());
+        loop = Boolean.parseBoolean(args[4].getValue().toString());
+        force = Boolean.parseBoolean(args[5].getValue().toString());
 
         if (!thread.isAlive()) {
             thread.start();

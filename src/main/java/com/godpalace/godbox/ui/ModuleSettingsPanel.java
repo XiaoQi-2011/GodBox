@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.ByteArrayInputStream;
@@ -18,6 +19,8 @@ import java.io.ObjectInputStream;
 @Slf4j
 public class ModuleSettingsPanel extends BoxPanel implements MouseListener, MouseMotionListener {
     private final Module module;
+    private BoxPanel centerPanel;
+    private BoxPanel topPanel;
 
     public ModuleSettingsPanel(Module module) {
         super();
@@ -54,14 +57,14 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         desc.setForeground(Color.WHITE);
         desc.setFont(UiSettings.font);
 
-        BoxPanel topPanel = new BoxPanel();
+        topPanel = new BoxPanel();
         topPanel.setLayout(new BorderLayout());
         topPanel.add(title, BorderLayout.CENTER);
         topPanel.add(desc, BorderLayout.SOUTH);
         add(topPanel, BorderLayout.NORTH);
 
         // 设置布局
-        BoxPanel centerPanel = new BoxPanel();
+        centerPanel = new BoxPanel();
         BoxLayout boxLayout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
         centerPanel.setLayout(boxLayout);
 
@@ -92,7 +95,11 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                     BoxTextArea textArea = new BoxTextArea(arg.getValue() + "");
 
                     // 监听输入
-                    textArea.addCaretListener(e -> arg.setValue(textArea.getText()));
+                    textArea.addCaretListener(e -> {
+                        arg.setValue(textArea.getText());
+                        ModuleSettingsPanel.this.setSize(400, topPanel.getPreferredSize().height + centerPanel.getPreferredSize().height);
+                        ModuleSettingsPanel.this.revalidate();
+                    });
                     textArea.addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
@@ -318,6 +325,13 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                     yield colorChooser;
                 }
 
+                case "show" -> {
+                    BoxShowPanel showPanel = new BoxShowPanel(arg);
+                    showPanel.getTextArea().setText(arg.getValue().toString());
+
+                    yield showPanel;
+                }
+
                 default -> {
                     log.warn("Not support type: {}", arg.getType());
 
@@ -350,7 +364,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
             
             // 添加到面板中
             panel.add(label, BorderLayout.WEST);
-            panel.add(input, (input instanceof JTextField || input instanceof JPanel)? BorderLayout.CENTER : BorderLayout.EAST);
+            panel.add(input, (input instanceof JTextField || input instanceof JTextArea || input instanceof JPanel)? BorderLayout.CENTER : BorderLayout.EAST);
             
             // 添加垂直间距
             centerPanel.add(panel);
@@ -380,6 +394,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         centerPanel.add(panel);
         // 添加到面板中
         add(centerPanel, BorderLayout.CENTER);
+
     }
 
     public void toCenter() {

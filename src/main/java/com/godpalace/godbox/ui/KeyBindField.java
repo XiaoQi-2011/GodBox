@@ -67,7 +67,7 @@ public class KeyBindField extends JComponent {
     @Override
     protected void paintComponent(Graphics g) {
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, getWidth(), getHeight());
+        g.fillRect(0, 0, getWidth(), UiSettings.moduleHeight);
 
         FontMetrics fm = g.getFontMetrics();
         int height = getHeight();
