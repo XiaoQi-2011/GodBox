@@ -50,8 +50,8 @@ public class Test implements Module {
     @Override
     public void Enable() {
         enabled = true;
-        ArgType.serialize(args[9].getValue().toString());
-        Color color = new Color(Integer.parseInt(args[11].getValue().toString()));
+        ArgType.serialize(args[10].getValue().toString());
+        Color color = new Color(Integer.parseInt(args[12].getValue().toString()));
         System.out.println(args[0].getName() + " " + args[0].getValue());
         System.out.println(args[1].getName() + " " + args[1].getValue());
         System.out.println(args[2].getName() + " " + args[2].getValue());
@@ -61,9 +61,10 @@ public class Test implements Module {
         System.out.println(args[6].getName() + " " + args[6].getValue());
         System.out.println(args[7].getName() + " " + args[7].getValue());
         System.out.println(args[8].getName() + " " + args[8].getValue());
-        System.out.println(args[9].getName() + " " + ArgType.getSelectedItem());
-        System.out.println(args[10].getName() + " " + args[10].getValue());
-        System.out.println(args[11].getName() + " " + color);
+        System.out.println(args[9].getName() + " " + args[9].getValue());
+        System.out.println(args[10].getName() + " " + ArgType.getSelectedItem());
+        System.out.println(args[11].getName() + " " + args[11].getValue());
+        System.out.println(args[12].getName() + " " + color);
     }
 
     @Override

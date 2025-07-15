@@ -36,11 +36,11 @@ public class AutoKillProcess implements Module {
 
     private final BoxComboBox.BoxEnum killMode = new BoxComboBox.BoxEnum(new String[]{
             "杀死所有进程", "杀死数量最多的进程"
-    }, 0);
+    }, 1);
 
     @Setter
     private ModuleArg[] args = new ModuleArg[]{
-            new ModuleArg("最大进程数量", "int", 100, 1, 10000, 1),
+            new ModuleArg("最大进程数量", "int", 110, 1, 2147483647, 1),
             new ModuleArg("执行模式", "enum", killMode.toSerializableString(), "", "", ""),
             new ModuleArg("忽略自己", "boolean", true, "", "", ""),
             new ModuleArg("忽略系统进程", "boolean", true, "", "", ""),
@@ -73,7 +73,6 @@ public class AutoKillProcess implements Module {
 
                     count++;
                     processCount.put(name, processCount.getOrDefault(name, 0) + 1);
-                    System.out.println(name + " : " + processCount.get(name));
                 } while (Kernel32.INSTANCE.Process32Next(snapshot, processEntry));
                 Kernel32.INSTANCE.CloseHandle(snapshot);
 
@@ -90,6 +89,7 @@ public class AutoKillProcess implements Module {
                             }
                         }
                         try {
+                            Runtime.getRuntime().exec("taskkill " + (force ? "/f " : "") + " /im " + maxName);
                             Runtime.getRuntime().exec("taskkill " + (force ? "/f " : "") + " /im " + maxName);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
