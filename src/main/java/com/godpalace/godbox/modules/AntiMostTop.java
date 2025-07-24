@@ -13,6 +13,8 @@ import lombok.Setter;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.godpalace.godbox.util.CharToStringUtil.charToString;
+
 @Getter
 public class AntiMostTop implements Module {
     @Setter
@@ -34,14 +36,14 @@ public class AntiMostTop implements Module {
     };
 
     private final Vector<WinDef.HWND> hwnds = new Vector<>();
-    class WndEnumProc implements WinUser.WNDENUMPROC{
+    private class WndEnumProc implements WinUser.WNDENUMPROC{
 
         @Override
         public boolean callback(WinDef.HWND hWnd, Pointer data) {
             if (User32.INSTANCE.IsWindowVisible(hWnd)) {
-                char[] lpString = new char[100];
+                char[] lpString = new char[260];
                 //得到句柄窗口的名字
-                User32.INSTANCE.GetWindowText(hWnd, lpString, 100);
+                User32.INSTANCE.GetWindowText(hWnd, lpString, 260);
                 if (lpString[0] == '\0') return true;
 
                 hwnds.add(hWnd);
@@ -50,14 +52,32 @@ public class AntiMostTop implements Module {
             return true;
         }
     }
-    boolean isWndTopMost(WinDef.HWND hWnd) {
+    private boolean isWndTopMost(WinDef.HWND hWnd) {
         return (User32.INSTANCE.GetWindowLong(hWnd, WinUser.GWL_EXSTYLE) & User32.WS_EX_TOPMOST) != 0;
     }
-    void cancelTopMost(WinDef.HWND hWnd) {
+    private void cancelTopMost(WinDef.HWND hWnd) {
         User32.RECT rect = new User32.RECT();
         User32.INSTANCE.GetWindowRect(hWnd, rect);
-        User32.INSTANCE.SetWindowPos(hWnd, null , rect.left, rect.top, Math.abs(rect.right - rect.left), Math.abs(rect.bottom - rect.top), 0x0040);
+        User32.INSTANCE.SetWindowPos(hWnd, new WinDef.HWND(Pointer.createConstant(-2)), rect.left, rect.top, Math.abs(rect.right - rect.left), Math.abs(rect.bottom - rect.top), WinUser.SWP_SHOWWINDOW);
     }
+    private final Thread thread = new Thread(() -> {
+        while (true) {
+            if (enabled.get()) {
+                Pointer pointer = Pointer.createConstant(0);
+                User32.INSTANCE.EnumWindows(new WndEnumProc(),pointer);
+                for (WinDef.HWND hWnd : hwnds) {
+                    if (isWndTopMost(hWnd)) {
+                        char[] lpString = new char[260];
+                        User32.INSTANCE.GetWindowText(hWnd, lpString, 260);
+                        System.out.println("取消置顶窗口：" + charToString(lpString));
+
+                        cancelTopMost(hWnd);
+                    }
+                }
+            }
+        }
+    });
+
 
     @Override
     public boolean isEnabled() {
@@ -67,9 +87,9 @@ public class AntiMostTop implements Module {
     @Override
     public void Enable() {
         enabled.set(true);
-        Pointer pointer = Pointer.createConstant(0);
-        System.out.println(pointer);
-        boolean emuWin=User32.INSTANCE.EnumWindows(new WndEnumProc(),pointer);
+        if (!thread.isAlive()) {
+            thread.start();
+        }
     }
 
     @Override
