@@ -25,7 +25,7 @@ public class AutoKillProcess implements Module {
 
     @Setter
     private boolean entered;
-    private final AtomicBoolean Enable = new AtomicBoolean(false);
+    private final AtomicBoolean enabled = new AtomicBoolean(false);
 
     @Setter
     private String keyBind = "None";
@@ -54,7 +54,7 @@ public class AutoKillProcess implements Module {
 
     private final Thread thread = new Thread(() -> {
         while (true) {
-            if (Enable.get()) {
+            if (enabled.get()) {
                 int maxCount = Integer.parseInt(args[0].getValue().toString());
                 int currentProcessId = Kernel32.INSTANCE.GetCurrentProcessId();
                 Map<String, Integer> processCount = new HashMap<>();
@@ -110,7 +110,7 @@ public class AutoKillProcess implements Module {
 
     @Override
     public boolean isEnabled() {
-        return Enable.get();
+        return enabled.get();
     }
 
     @Override
@@ -123,11 +123,11 @@ public class AutoKillProcess implements Module {
         if (!thread.isAlive()) {
             thread.start();
         }
-        Enable.set(true);
+        enabled.set(true);
     }
 
     @Override
     public void Disable() {
-        Enable.set(false);
+        enabled.set(false);
     }
 }

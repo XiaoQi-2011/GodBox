@@ -4,13 +4,24 @@ import com.godpalace.godbox.UiSettings;
 import com.godpalace.godbox.module_mgr.ModuleArg;
 import lombok.Getter;
 
+import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
 public class BoxShowPanel extends BoxPanel{
     private final BoxTextArea textArea = new BoxTextArea("");
     private final BoxButton button = new BoxButton("获取");
-    private final ModuleArg moduleArg;
+    private ModuleArg moduleArg;
+
+    private final AtomicBoolean autoShow = new AtomicBoolean(true);
+    private int delay = 100;
+    private final Timer timer = new Timer(delay, e -> {
+        if (autoShow.get()) {
+            String value = moduleArg.getValue().toString();
+            textArea.setText(value);
+        }
+    });
 
     public BoxShowPanel(ModuleArg moduleArg) {
         super();
@@ -29,5 +40,17 @@ public class BoxShowPanel extends BoxPanel{
 
         add(textArea, BorderLayout.CENTER);
         add(button, BorderLayout.EAST);
+        setAutoShow(true, 100);
+    }
+
+    public void setAutoShow(boolean autoShow, int delay) {
+        this.autoShow.set(autoShow);
+        this.delay = delay;
+        timer.setDelay(delay);
+        if (autoShow) {
+            timer.start();
+        } else {
+            timer.stop();
+        }
     }
 }

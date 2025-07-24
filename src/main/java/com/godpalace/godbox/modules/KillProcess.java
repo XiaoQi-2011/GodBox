@@ -21,7 +21,7 @@ public class KillProcess implements Module {
 
     @Setter
     private boolean entered;
-    private final AtomicBoolean Enable = new AtomicBoolean(false);
+    private final AtomicBoolean enabled = new AtomicBoolean(false);
 
     @Setter
     private String keyBind = "None";
@@ -48,7 +48,7 @@ public class KillProcess implements Module {
 
     private final Thread thread = new Thread(() -> {
         while (true) {
-            if (Enable.get()) {
+            if (enabled.get()) {
                 int currentProcessId = Kernel32.INSTANCE.GetCurrentProcessId();
                 String processName = args[0].getValue().toString();
                 if (!killAll) {
@@ -80,7 +80,7 @@ public class KillProcess implements Module {
                     Kernel32.INSTANCE.CloseHandle(snapshot);
                 }
                 if (!loop) {
-                    Enable.set(false);
+                    enabled.set(false);
                 }
             }
             try {
@@ -93,7 +93,7 @@ public class KillProcess implements Module {
 
     @Override
     public boolean isEnabled() {
-        return Enable.get();
+        return enabled.get();
     }
 
     @Override
@@ -107,11 +107,11 @@ public class KillProcess implements Module {
         if (!thread.isAlive()) {
             thread.start();
         }
-        Enable.set(true);
+        enabled.set(true);
     }
 
     @Override
     public void Disable() {
-        Enable.set(false);
+        enabled.set(false);
     }
 }

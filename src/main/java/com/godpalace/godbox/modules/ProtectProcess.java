@@ -29,11 +29,11 @@ public class ProtectProcess implements Module {
             new ModuleArg("保护自己", "boolean", false, "", "", "")
     };
 
-    private final ProcessProtector protector = ProcessProtector.getInstance();
 
     @Override
     public void Enable() {
         enabled = true;
+        ProcessProtector protector = ProcessProtector.getInstance();
         int pid = Integer.parseInt(args[0].getValue().toString());
         boolean protectSelf = Boolean.parseBoolean(args[1].getValue().toString());
 
@@ -48,6 +48,7 @@ public class ProtectProcess implements Module {
     @Override
     public void Disable() {
         enabled = false;
+        ProcessProtector protector = ProcessProtector.getInstance();
         if (protector.isProtected()) {
             protector.unprotect();
         }

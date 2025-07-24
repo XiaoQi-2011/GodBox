@@ -129,7 +129,6 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     editor.getTextField().addActionListener(e -> arg.setValue(Byte.parseByte(editor.getTextField().getText())));
-                    editor.getTextField().addCaretListener(e -> arg.setValue(Byte.parseByte(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
@@ -153,7 +152,6 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     editor.getTextField().addActionListener(e -> arg.setValue(Short.parseShort(editor.getTextField().getText())));
-                    editor.getTextField().addCaretListener(e -> arg.setValue(Short.parseShort(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
@@ -177,7 +175,6 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     editor.getTextField().addActionListener(e -> arg.setValue(Integer.parseInt(editor.getTextField().getText())));
-                    editor.getTextField().addCaretListener(e -> arg.setValue(Integer.parseInt(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
@@ -201,7 +198,6 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     editor.getTextField().addActionListener(e -> arg.setValue(Long.parseLong(editor.getTextField().getText())));
-                    editor.getTextField().addCaretListener(e -> arg.setValue(Long.parseLong(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
@@ -238,7 +234,6 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     editor.getTextField().addActionListener(e -> arg.setValue(Float.parseFloat(editor.getTextField().getText())));
-                    editor.getTextField().addCaretListener(e -> arg.setValue(Float.parseFloat(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
@@ -265,7 +260,6 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     editor.getTextField().addActionListener(e -> arg.setValue(Double.parseDouble(editor.getTextField().getText())));
-                    editor.getTextField().addCaretListener(e -> arg.setValue(Double.parseDouble(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
