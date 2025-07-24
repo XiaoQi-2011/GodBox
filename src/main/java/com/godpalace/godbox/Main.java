@@ -3,6 +3,7 @@ package com.godpalace.godbox;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+import com.godpalace.godbox.mgr.KeyBindListener;
 import com.godpalace.godbox.mgr.ModuleMgr;
 import com.godpalace.godbox.module_mgr.Module;
 import com.godpalace.godbox.ui.BackgroundFrame;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -97,6 +100,14 @@ public class Main {
                 }
             });
             ui.setVisible(true);
+
+            if (!Files.exists(Path.of("dll"))) {
+                Files.createDirectory(Path.of("dll"));
+            }
+
+            if (UiSettings.keyBindEnabled) {
+                KeyBindListener.start();
+            }
 
             log.info("GodBox started successfully");
         } catch (Exception e) {

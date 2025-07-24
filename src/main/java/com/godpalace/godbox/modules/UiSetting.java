@@ -23,7 +23,7 @@ public class UiSetting implements Module {
     private String keyBind = "None";
 
     private final String displayName = "UI设置";
-    private final String description = "设置UI样式";
+    private final String description = "设置UI样式(保存更改需运行一次模块，重启程序生效)";
     private final String typeListName = "SETTINGS";
 
     private final BoxComboBox.BoxEnum ArgType = new BoxComboBox.BoxEnum(

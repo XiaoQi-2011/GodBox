@@ -23,7 +23,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
         // 设置面板
         setLayout(new BorderLayout());
-        setSize(400, (module.getArgs().length + 4) * (UiSettings.moduleHeight + 5) - 24);
+        setSize(400, (module.getArgs().length + 4) * (UiSettings.moduleHeight + 5) - 22);
         setBorder(new LineBorder(UiSettings.themeColor));
         setFocusable(true);
         addMouseListener(this);
@@ -40,7 +40,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
     // 初始化配置面板
     private void initComponents() {
         // 添加标题
-        JLabel title = new JLabel(module.getDisplayName());
+        BoxLabel title = new BoxLabel(module.getDisplayName());
         title.setOpaque(true);
         title.setForeground(Color.WHITE);
         title.setBackground(UiSettings.themeColor);
@@ -48,8 +48,9 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         title.setFont(UiSettings.font.deriveFont(18.0f));
 
         // 添加描述
-        JLabel desc = new JLabel(module.getDescription());
+        BoxLabel desc = new BoxLabel(module.getDescription(), SwingConstants.LEFT);
         desc.setForeground(Color.WHITE);
+        desc.setBorder(new LineBorder(UiSettings.themeColor));
         desc.setFont(UiSettings.font);
 
         topPanel = new BoxPanel();
@@ -66,7 +67,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         centerPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         // 添加配置项
         for (ModuleArg arg : module.getArgs()) {
-            JLabel label = new JLabel(arg.getName() + ":");
+            BoxLabel label = new BoxLabel(arg.getName() + ":");
             label.setForeground(Color.WHITE);
             label.setFont(UiSettings.font);
 
@@ -92,7 +93,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                     // 监听输入
                     textArea.addCaretListener(e -> {
                         arg.setValue(textArea.getText());
-                        ModuleSettingsPanel.this.setSize(400, topPanel.getPreferredSize().height + centerPanel.getPreferredSize().height);
+                        ModuleSettingsPanel.this.setSize(400, topPanel.getPreferredSize().height + centerPanel.getPreferredSize().height + 5);
                         ModuleSettingsPanel.this.revalidate();
                     });
                     textArea.addFocusListener(new FocusAdapter() {
@@ -128,6 +129,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     editor.getTextField().addActionListener(e -> arg.setValue(Byte.parseByte(editor.getTextField().getText())));
+                    editor.getTextField().addCaretListener(e -> arg.setValue(Byte.parseByte(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
@@ -151,6 +153,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     editor.getTextField().addActionListener(e -> arg.setValue(Short.parseShort(editor.getTextField().getText())));
+                    editor.getTextField().addCaretListener(e -> arg.setValue(Short.parseShort(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
@@ -174,6 +177,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     editor.getTextField().addActionListener(e -> arg.setValue(Integer.parseInt(editor.getTextField().getText())));
+                    editor.getTextField().addCaretListener(e -> arg.setValue(Integer.parseInt(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
@@ -197,6 +201,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     editor.getTextField().addActionListener(e -> arg.setValue(Long.parseLong(editor.getTextField().getText())));
+                    editor.getTextField().addCaretListener(e -> arg.setValue(Long.parseLong(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
@@ -233,6 +238,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     editor.getTextField().addActionListener(e -> arg.setValue(Float.parseFloat(editor.getTextField().getText())));
+                    editor.getTextField().addCaretListener(e -> arg.setValue(Float.parseFloat(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
@@ -259,6 +265,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     editor.getTextField().addActionListener(e -> arg.setValue(Double.parseDouble(editor.getTextField().getText())));
+                    editor.getTextField().addCaretListener(e -> arg.setValue(Double.parseDouble(editor.getTextField().getText())));
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
@@ -379,7 +386,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
         BoxPanel panel = new BoxPanel();
         panel.setLayout(new BorderLayout(10, 0));
 
-        JLabel label = new JLabel("按键绑定:");
+        BoxLabel label = new BoxLabel("按键绑定:");
         label.setForeground(Color.WHITE);
         label.setFont(UiSettings.font);
 

@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Vector;
 
 @Getter
 @Setter
@@ -14,28 +15,19 @@ public class KeyBindField extends JComponent {
     private String keyBind;
 
     private boolean isSelecting = false;
+    private Vector<String> keyList = new Vector<>();
     private final KeyAdapter keyAdapter = new KeyAdapter() {
         @Override
         public void keyPressed(KeyEvent e) {
             String s = KeyEvent.getKeyText(e.getKeyCode());
-            if (s.equals("Esc")) {
+            if (s.equals("Esc") || keyList.contains("None")) {
                 s = "None";
+                keyList.clear();
+            }
+            if (!keyList.contains(s)) {
+                keyList.add(s);
             }
 
-            boolean isCtrl = e.isControlDown();
-            boolean isAlt = e.isAltDown();
-            boolean isShift = e.isShiftDown();
-
-            if (isCtrl && !s.equals("Ctrl")) {
-                s = "Ctrl+" + s;
-            }
-            if (isAlt && !s.equals("Alt")) {
-                s = "Alt+" + s;
-            }
-            if (isShift && !s.equals("Shift")) {
-                s = "Shift+" + s;
-            }
-            keyBind = s;
             repaint();
         }
 
@@ -44,6 +36,17 @@ public class KeyBindField extends JComponent {
             // 将焦点丢失
             setFocusable(false);
             isSelecting = false;
+
+            keyBind = "";
+            for (int i = 0; i < keyList.size(); i++) {
+                if (i != keyList.size() - 1) {
+                    keyBind += keyList.get(i) + " + ";
+                } else {
+                    keyBind += keyList.get(i);
+                }
+            }
+
+            keyList.clear();
             repaint();
         }
     };

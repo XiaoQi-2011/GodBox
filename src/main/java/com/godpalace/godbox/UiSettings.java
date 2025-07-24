@@ -23,7 +23,7 @@ public class UiSettings {
     public static Font font = new Font("宋体", Font.PLAIN, 14);
 
     @Data
-    public static int moduleHeight = 20;
+    public static int moduleHeight = 22;
 
     @Data
     public static boolean keyBindEnabled = true;

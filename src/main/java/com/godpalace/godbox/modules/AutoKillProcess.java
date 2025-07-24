@@ -52,7 +52,7 @@ public class AutoKillProcess implements Module {
     private boolean ignoreSystem = true;
     private boolean force = false;
 
-    Thread thread = new Thread(() -> {
+    private final Thread thread = new Thread(() -> {
         while (true) {
             if (Enable.get()) {
                 int maxCount = Integer.parseInt(args[0].getValue().toString());
@@ -89,7 +89,6 @@ public class AutoKillProcess implements Module {
                             }
                         }
                         try {
-                            Runtime.getRuntime().exec("taskkill " + (force ? "/f " : "") + " /im " + maxName);
                             Runtime.getRuntime().exec("taskkill " + (force ? "/f " : "") + " /im " + maxName);
                         } catch (IOException e) {
                             throw new RuntimeException(e);

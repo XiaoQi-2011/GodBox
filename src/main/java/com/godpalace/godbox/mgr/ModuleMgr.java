@@ -28,6 +28,7 @@ public class ModuleMgr {
         List<String> classes = PackageUtil.getClassName("com.godpalace.godbox.modules");
         for (String classPath : classes) {
             String className = classPath.substring(classPath.lastIndexOf(".") + 1);
+
             if (className.equals("Module")) continue;
 
             Class<?> clazz;

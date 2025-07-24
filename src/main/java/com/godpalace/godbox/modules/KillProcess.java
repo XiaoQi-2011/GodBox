@@ -46,7 +46,7 @@ public class KillProcess implements Module {
     private boolean loop = true;
     private boolean force = false;
 
-    Thread thread = new Thread(() -> {
+    private final Thread thread = new Thread(() -> {
         while (true) {
             if (Enable.get()) {
                 int currentProcessId = Kernel32.INSTANCE.GetCurrentProcessId();
