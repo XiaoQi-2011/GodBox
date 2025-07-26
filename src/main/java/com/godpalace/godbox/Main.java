@@ -101,10 +101,6 @@ public class Main {
             });
             ui.setVisible(true);
 
-            if (!Files.exists(Path.of("dll"))) {
-                Files.createDirectory(Path.of("dll"));
-            }
-
             if (UiSettings.keyBindEnabled) {
                 KeyBindListener.start();
             }
