@@ -113,5 +113,6 @@ public class KillProcess implements Module {
     @Override
     public void Disable() {
         enabled.set(false);
+        thread.interrupt();
     }
 }

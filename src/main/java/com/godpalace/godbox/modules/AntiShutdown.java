@@ -69,5 +69,6 @@ public class AntiShutdown implements Module {
     @Override
     public void Disable() {
         Enabled.set(false);
+        thread.interrupt();
     }
 }

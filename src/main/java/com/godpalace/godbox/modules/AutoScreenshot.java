@@ -2,7 +2,6 @@ package com.godpalace.godbox.modules;
 
 import com.godpalace.godbox.module_mgr.Module;
 import com.godpalace.godbox.module_mgr.ModuleArg;
-import com.godpalace.godbox.ui.BoxComboBox;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +9,7 @@ import lombok.Setter;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
-public class AutoCapture implements Module {
+public class AutoScreenshot implements Module {
     @Setter
     private ModuleSettingsPanel settingsPanel;
 

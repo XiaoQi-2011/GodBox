@@ -6,6 +6,7 @@ import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinUser;
 import com.sun.jna.win32.StdCallLibrary;
+import lombok.Setter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,7 +19,10 @@ import static com.godpalace.godbox.util.CharToStringUtil.charToString;
 
 public class AntiMostTopUtil {
     private final AtomicBoolean enabled = new AtomicBoolean(false);
+    @Setter
+    private boolean isReMostTop = false;
     private final Vector<WinDef.HWND> hwnds = new Vector<>();
+    private final Vector<WinDef.HWND> reMostTopWnds = new Vector<>();
 
     static {
         File dll = new File(System.getenv("TEMP"), "AntiTopMost.dll");
@@ -80,6 +84,7 @@ public class AntiMostTopUtil {
                         User32.INSTANCE.GetWindowText(hWnd, lpString, 260);
                         System.out.println("取消置顶窗口：" + charToString(lpString));
 
+                        reMostTopWnds.add(hWnd);
                         TopMostFunc.INSTANCE.cancelTopMost(hWnd);
                     }
                 }
@@ -89,6 +94,7 @@ public class AntiMostTopUtil {
 
     public void start() {
         enabled.set(true);
+        reMostTopWnds.clear();
         if (!thread.isAlive()) {
             thread.start();
         }
@@ -96,5 +102,16 @@ public class AntiMostTopUtil {
 
     public void stop() {
         enabled.set(false);
+        thread.interrupt();
+        if (!isReMostTop || reMostTopWnds.isEmpty()) {
+            return;
+        }
+        for (WinDef.HWND hWnd : reMostTopWnds) {
+            char[] lpString = new char[260];
+            User32.INSTANCE.GetWindowText(hWnd, lpString, 260);
+            System.out.println("恢复置顶窗口：" + charToString(lpString));
+
+            TopMostFunc.INSTANCE.showWndTopMost(hWnd);
+        }
     }
 }

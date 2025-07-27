@@ -35,6 +35,7 @@ public class AntiMostTop implements Module {
 
     @Setter
     private ModuleArg[] args = new ModuleArg[]{
+            new ModuleArg("关闭模块后取消反置顶", "boolean", false, "", "", "")
     };
 
     private final AntiMostTopUtil antiMostTopUtil = new AntiMostTopUtil();
@@ -47,12 +48,16 @@ public class AntiMostTop implements Module {
     @Override
     public void Enable() {
         enabled.set(true);
+        boolean isReMostTop = Boolean.parseBoolean(args[0].getValue().toString());
+        antiMostTopUtil.setReMostTop(isReMostTop);
         antiMostTopUtil.start();
     }
 
     @Override
     public void Disable() {
         enabled.set(false);
+        boolean isReMostTop = Boolean.parseBoolean(args[0].getValue().toString());
+        antiMostTopUtil.setReMostTop(isReMostTop);
         antiMostTopUtil.stop();
     }
 }

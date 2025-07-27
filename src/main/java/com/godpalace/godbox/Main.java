@@ -8,6 +8,7 @@ import com.godpalace.godbox.mgr.ModuleMgr;
 import com.godpalace.godbox.module_mgr.Module;
 import com.godpalace.godbox.ui.BackgroundFrame;
 import com.godpalace.godbox.ui.TypeList;
+import com.godpalace.godbox.util.DialogUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

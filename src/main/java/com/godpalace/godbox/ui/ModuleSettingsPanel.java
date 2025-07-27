@@ -83,6 +83,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             arg.setValue(textField.getText());
                         }
                     });
+                    arg.setComponent(textField);
 
                     yield textField;
                 }
@@ -102,6 +103,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             arg.setValue(textArea.getText());
                         }
                     });
+                    arg.setComponent(textArea);
 
                     yield textArea;
                 }
@@ -112,6 +114,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     charSelector.addActionListener(e -> arg.setValue(charSelector.getC()));
+                    arg.setComponent(charSelector);
 
                     yield charSelector;
                 }
@@ -135,6 +138,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             arg.setValue(Byte.parseByte(editor.getTextField().getText()));
                         }
                     });
+                    arg.setComponent(spinner);
 
                     yield spinner;
                 }
@@ -158,6 +162,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             arg.setValue(Short.parseShort(editor.getTextField().getText()));
                         }
                     });
+                    arg.setComponent(spinner);
 
                     yield spinner;
                 }
@@ -181,6 +186,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             arg.setValue(Integer.parseInt(editor.getTextField().getText()));
                         }
                     });
+                    arg.setComponent(spinner);
 
                     yield spinner;
                 }
@@ -204,6 +210,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             arg.setValue(Long.parseLong(editor.getTextField().getText()));
                         }
                     });
+                    arg.setComponent(spinner);
 
                     yield spinner;
                 }
@@ -214,6 +221,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
 
                     // 监听输入
                     checkbox.addActionListener(e -> arg.setValue(checkbox.isSelected()));
+                    arg.setComponent(checkbox);
 
                     yield checkbox;
                 }
@@ -240,6 +248,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             arg.setValue(Float.parseFloat(editor.getTextField().getText()));
                         }
                     });
+                    arg.setComponent(spinner);
 
                     yield spinner;
                 }
@@ -266,6 +275,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             arg.setValue(Double.parseDouble(editor.getTextField().getText()));
                         }
                     });
+                    arg.setComponent(spinner);
 
                     yield spinner;
                 }
@@ -285,6 +295,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             comboBox.setFocusable(false);
                         }
                     });
+                    arg.setComponent(comboBox);
 
                     yield comboBox;
                 }
@@ -300,6 +311,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             arg.setValue(fileChooser.getSelectedFile());
                         }
                     });
+                    arg.setComponent(fileChooser);
 
                     yield fileChooser;
                 }
@@ -317,6 +329,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                             arg.setValue(newColor.getRGB());
                         }
                     });
+                    arg.setComponent(colorChooser);
 
                     yield colorChooser;
                 }
@@ -324,6 +337,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                 case "show" -> {
                     BoxShowPanel showPanel = new BoxShowPanel(arg);
                     showPanel.getTextArea().setText(arg.getValue().toString());
+                    arg.setComponent(showPanel);
 
                     yield showPanel;
                 }

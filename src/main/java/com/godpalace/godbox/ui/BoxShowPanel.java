@@ -2,7 +2,9 @@ package com.godpalace.godbox.ui;
 
 import com.godpalace.godbox.UiSettings;
 import com.godpalace.godbox.module_mgr.ModuleArg;
+import com.godpalace.godbox.util.DialogUtil;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,9 +14,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class BoxShowPanel extends BoxPanel{
     private final BoxTextArea textArea = new BoxTextArea("");
     private final BoxButton button = new BoxButton("获取");
+    private ShowType showType = ShowType.TEXTAREA;
     private ModuleArg moduleArg;
 
-    private final AtomicBoolean autoShow = new AtomicBoolean(true);
+    private final AtomicBoolean autoShow = new AtomicBoolean(false);
     private int delay = 100;
     private final Timer timer = new Timer(delay, e -> {
         if (autoShow.get()) {
@@ -34,23 +37,43 @@ public class BoxShowPanel extends BoxPanel{
         button.setPreferredSize(new Dimension(UiSettings.moduleHeight * 2, UiSettings.moduleHeight));
         button.addActionListener(e -> {
             String value = moduleArg.getValue().toString();
-            textArea.setText(value);
+            if (showType == ShowType.TEXTAREA) {
+                textArea.setText(value);
+            } else if (showType == ShowType.DIALOG) {
+                DialogUtil.showModuleInfo(value);
+            }
         });
         textArea.setEditable(false);
 
         add(textArea, BorderLayout.CENTER);
         add(button, BorderLayout.EAST);
-        setAutoShow(true, 100);
     }
 
     public void setAutoShow(boolean autoShow, int delay) {
         this.autoShow.set(autoShow);
         this.delay = delay;
         timer.setDelay(delay);
-        if (autoShow) {
+        if (autoShow && !timer.isRunning()) {
             timer.start();
         } else {
             timer.stop();
         }
+    }
+
+    public void setShowType(ShowType showType) {
+        this.showType = showType;
+        if (showType == ShowType.TEXTAREA) {
+            if (textArea.getParent() == null) {
+                add(textArea, BorderLayout.CENTER);
+            }
+        } else if (showType == ShowType.DIALOG) {
+            if (textArea.getParent() != null) {
+                remove(textArea);
+            }
+        }
+    }
+
+    public enum ShowType {
+        TEXTAREA, DIALOG
     }
 }

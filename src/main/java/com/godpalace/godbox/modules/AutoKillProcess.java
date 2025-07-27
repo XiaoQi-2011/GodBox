@@ -4,6 +4,7 @@ package com.godpalace.godbox.modules;
 import com.godpalace.godbox.module_mgr.Module;
 import com.godpalace.godbox.module_mgr.ModuleArg;
 import com.godpalace.godbox.ui.BoxComboBox;
+import com.godpalace.godbox.ui.BoxShowPanel;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
 import com.godpalace.godbox.util.CharToStringUtil;
 import com.sun.jna.platform.win32.Kernel32;
@@ -115,6 +116,9 @@ public class AutoKillProcess implements Module {
 
     @Override
     public void Enable() {
+        BoxShowPanel showPanel = (BoxShowPanel) args[3].getComponent();
+        showPanel.setAutoShow(true, 100);
+
         killMode.serialize(args[1].getValue().toString());
         ignoreSelf = Boolean.parseBoolean(args[2].getValue().toString());
         ignoreSystem = Boolean.parseBoolean(args[3].getValue().toString());
@@ -129,5 +133,6 @@ public class AutoKillProcess implements Module {
     @Override
     public void Disable() {
         enabled.set(false);
+        thread.interrupt();
     }
 }
