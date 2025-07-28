@@ -15,7 +15,7 @@ public class CmdExecutor implements Module {
 
     @Setter
     private boolean entered;
-    private final AtomicBoolean Enable = new AtomicBoolean(false);
+    private final AtomicBoolean enabled = new AtomicBoolean(false);
 
     @Setter
     private String keyBind = "None";
@@ -35,7 +35,7 @@ public class CmdExecutor implements Module {
 
     Thread thread = new Thread(() -> {
         while (true) {
-            if (Enable.get()) {
+            if (enabled.get()) {
                 String[] cmds = args[0].getValue().toString().split("\n");
                 for (String cmd : cmds) {
                     if (!cmd.trim().isEmpty()) {
@@ -48,7 +48,7 @@ public class CmdExecutor implements Module {
                     }
                 }
                 if (!loop) {
-                    Enable.set(false);
+                    enabled.set(false);
                 }
             }
         }
@@ -56,7 +56,7 @@ public class CmdExecutor implements Module {
 
     @Override
     public boolean isEnabled() {
-        return Enable.get();
+        return enabled.get();
     }
 
     @Override
@@ -66,12 +66,12 @@ public class CmdExecutor implements Module {
         if (!thread.isAlive()) {
             thread.start();
         }
-        Enable.set(true);
+        enabled.set(true);
     }
 
     @Override
     public void Disable() {
-        Enable.set(false);
+        enabled.set(false);
     }
 
     @Override

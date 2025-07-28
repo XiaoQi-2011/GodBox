@@ -17,7 +17,7 @@ public class AntiShutdown implements Module {
 
     @Setter
     private boolean entered;
-    private final AtomicBoolean Enabled = new AtomicBoolean(false);
+    private final AtomicBoolean enabled = new AtomicBoolean(false);
 
     @Setter
     private String keyBind = "None";
@@ -38,7 +38,7 @@ public class AntiShutdown implements Module {
     private String modeValue;
     private final Thread thread = new Thread(() -> {
         while (true) {
-            if (Enabled.get()) {
+            if (enabled.get()) {
                 if (modeValue.equals("CMD")) {
                     try {
                         Runtime.getRuntime().exec("shutdown -a");
@@ -52,12 +52,12 @@ public class AntiShutdown implements Module {
 
     @Override
     public boolean isEnabled() {
-        return Enabled.get();
+        return enabled.get();
     }
 
     @Override
     public void Enable() {
-        Enabled.set(true);
+        enabled.set(true);
         mode.serialize(args[0].getValue().toString());
         modeValue = mode.getSelectedItem();
 
@@ -68,7 +68,7 @@ public class AntiShutdown implements Module {
 
     @Override
     public void Disable() {
-        Enabled.set(false);
+        enabled.set(false);
         thread.interrupt();
     }
 
