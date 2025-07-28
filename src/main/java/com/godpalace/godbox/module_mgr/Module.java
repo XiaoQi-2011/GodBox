@@ -1,6 +1,5 @@
 package com.godpalace.godbox.module_mgr;
 
-import com.godpalace.godbox.mgr.GsonFactory;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
 
 public interface Module {
@@ -32,7 +31,5 @@ public interface Module {
 
     void Disable();
 
-    default String getJsonString() {
-        return GsonFactory.getGson().toJson(this);
-    }
+    void init();
 }

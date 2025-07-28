@@ -45,4 +45,7 @@ public class AutoScreenshot implements Module {
     public void Disable() {
         enabled.set(false);
     }
+
+    @Override
+    public void init() {}
 }

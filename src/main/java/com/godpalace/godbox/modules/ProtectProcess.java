@@ -53,4 +53,7 @@ public class ProtectProcess implements Module {
             protector.unprotect();
         }
     }
+
+    @Override
+    public void init() {}
 }

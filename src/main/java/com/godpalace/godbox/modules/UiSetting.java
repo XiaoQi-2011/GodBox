@@ -52,4 +52,7 @@ public class UiSetting implements Module {
     public void Disable() {
         enabled = false;
     }
+
+    @Override
+    public void init() {}
 }

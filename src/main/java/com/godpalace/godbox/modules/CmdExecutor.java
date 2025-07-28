@@ -72,6 +72,8 @@ public class CmdExecutor implements Module {
     @Override
     public void Disable() {
         Enable.set(false);
-        thread.interrupt();
     }
+
+    @Override
+    public void init() {}
 }

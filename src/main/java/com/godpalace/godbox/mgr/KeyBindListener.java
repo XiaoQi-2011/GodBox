@@ -5,9 +5,11 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.godpalace.godbox.Main;
 import com.godpalace.godbox.module_mgr.Module;
+import com.godpalace.godbox.util.DialogUtil;
 import lombok.Getter;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Vector;
 
 public class KeyBindListener {
@@ -48,8 +50,10 @@ public class KeyBindListener {
                 String[] keyBind = module.getKeyBind().split(" \\+ ");
                 if (compare(keyBind)) {
                     if (module.isEnabled()) {
+                        new Thread(() -> DialogUtil.showModuleInfo("[" + module.getDisplayName() + "] 关闭", Color.RED, 2000)).start();
                         module.Disable();
                     } else {
+                        new Thread(() -> DialogUtil.showModuleInfo("[" + module.getDisplayName() + "] 开启", Color.GREEN, 2000)).start();
                         module.Enable();
                     }
                     SwingUtilities.updateComponentTreeUI(Main.getUi());

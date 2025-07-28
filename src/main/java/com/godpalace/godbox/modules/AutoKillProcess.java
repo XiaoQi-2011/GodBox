@@ -116,9 +116,6 @@ public class AutoKillProcess implements Module {
 
     @Override
     public void Enable() {
-        BoxShowPanel showPanel = (BoxShowPanel) args[3].getComponent();
-        showPanel.setAutoShow(true, 100);
-
         killMode.serialize(args[1].getValue().toString());
         ignoreSelf = Boolean.parseBoolean(args[2].getValue().toString());
         ignoreSystem = Boolean.parseBoolean(args[3].getValue().toString());
@@ -134,5 +131,19 @@ public class AutoKillProcess implements Module {
     public void Disable() {
         enabled.set(false);
         thread.interrupt();
+        args[5].setValue("");
+    }
+
+    @Override
+    public void init() {
+        BoxShowPanel showPanel = (BoxShowPanel) args[5].getComponent();
+        showPanel.setAutoShow(true, 100);
+        showPanel.setOnClickEvent(() -> {
+            if (args[5].getValue() == null || args[5].getValue().toString().isEmpty()) {
+                args[5].setValue("请先开启模块");
+            }
+        });
     }
 }
+
+

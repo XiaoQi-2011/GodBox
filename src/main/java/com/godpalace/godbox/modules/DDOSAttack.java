@@ -65,8 +65,6 @@ public class DDOSAttack implements Module {
     public void Enable() {
         enabled.set(true);
         packetCount = 0;
-        BoxShowPanel showPanel = (BoxShowPanel) args[3].getComponent();
-        showPanel.setAutoShow(true, 100);
         address = args[0].getValue().toString();
         attackInterval = Integer.parseInt(args[1].getValue().toString());
         threadCount = Integer.parseInt(args[2].getValue().toString());
@@ -83,5 +81,11 @@ public class DDOSAttack implements Module {
         enabled.set(false);
         packetCount = 0;
         args[3].setValue(packetCount);
+    }
+
+    @Override
+    public void init() {
+        BoxShowPanel showPanel = (BoxShowPanel) args[3].getComponent();
+        showPanel.setAutoShow(true, 100);
     }
 }

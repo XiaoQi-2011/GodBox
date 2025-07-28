@@ -58,7 +58,6 @@ public class ModuleMgr {
 
             // 添加到modules列表中
             modules.add(module);
-            log.info("Module {} loaded", module.getDisplayName());
 
             // 从配置文件中加载模块配置
             moduleConfigMgr.load();
@@ -66,6 +65,10 @@ public class ModuleMgr {
             // 创建模块配置面板
             ModuleSettingsPanel panel = new ModuleSettingsPanel(module);
             module.setSettingsPanel(panel);
+
+            // 初始化模块
+            module.init();
+            log.info("Module {} loaded", module.getDisplayName());
         }
     }
 }

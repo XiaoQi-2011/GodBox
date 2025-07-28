@@ -101,7 +101,7 @@ public class KeyBindField extends JComponent {
         if (listener != null) {
             addKeyListener(new KeyAdapter() {
                 @Override
-                public void keyTyped(KeyEvent e) {
+                public void keyReleased(KeyEvent e) {
                     listener.actionPerformed(new ActionEvent(KeyBindField.this, 0, keyBind));
                 }
             });

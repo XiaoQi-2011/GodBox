@@ -30,6 +30,7 @@ public class Setting implements Module {
     @Setter
     private ModuleArg[] args = new ModuleArg[]{
             new ModuleArg("是否启用快捷键", "boolean", true, "", "", ""),
+            new ModuleArg("是否启用模块开关提示", "boolean", true, "", "", "")
     };
 
 
@@ -37,6 +38,7 @@ public class Setting implements Module {
     public void Enable() {
         enabled = true;
         UiSettings.keyBindEnabled = Boolean.parseBoolean(args[0].getValue().toString());
+        UiSettings.moduleInfoEnabled = Boolean.parseBoolean(args[1].getValue().toString());
         if (UiSettings.keyBindEnabled) {
             KeyBindListener.start();
         } else {
@@ -48,4 +50,7 @@ public class Setting implements Module {
     public void Disable() {
         enabled = false;
     }
+
+    @Override
+    public void init() {}
 }

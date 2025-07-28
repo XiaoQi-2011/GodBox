@@ -32,7 +32,7 @@ public class KillProcess implements Module {
 
     @Setter
     private ModuleArg[] args = new ModuleArg[]{
-            new ModuleArg("进程名", "string", "", "", "", ""),
+            new ModuleArg("进程名(一行一个)", "long-string", "", "", "", ""),
             new ModuleArg("杀死全部进程", "boolean", false, "", "", ""),
             new ModuleArg("忽略自己", "boolean", true, "", "", ""),
             new ModuleArg("忽略系统进程", "boolean", true, "", "", ""),
@@ -50,10 +50,12 @@ public class KillProcess implements Module {
         while (true) {
             if (enabled.get()) {
                 int currentProcessId = Kernel32.INSTANCE.GetCurrentProcessId();
-                String processName = args[0].getValue().toString();
+                String[] processNames = args[0].getValue().toString().split("\n");
                 if (!killAll) {
                     try {
-                        Runtime.getRuntime().exec("taskkill " + (force? "/f " : "") + " /im " + processName);
+                        for (String processName : processNames) {
+                            Runtime.getRuntime().exec("taskkill " + (force ? "/f " : "") + " /im " + processName);
+                        }
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -113,6 +115,8 @@ public class KillProcess implements Module {
     @Override
     public void Disable() {
         enabled.set(false);
-        thread.interrupt();
     }
+
+    @Override
+    public void init() {}
 }

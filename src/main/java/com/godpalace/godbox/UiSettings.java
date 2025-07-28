@@ -28,6 +28,9 @@ public class UiSettings {
     @Data
     public static boolean keyBindEnabled = true;
 
+    @Data
+    public static boolean moduleInfoEnabled = false;
+
     public static void initialize() {
         try {
             FileDatabaseEngine.init(UiSettings.class, null);

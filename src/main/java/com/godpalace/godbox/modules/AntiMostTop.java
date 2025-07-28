@@ -2,20 +2,13 @@ package com.godpalace.godbox.modules;
 
 import com.godpalace.godbox.module_mgr.Module;
 import com.godpalace.godbox.module_mgr.ModuleArg;
-import com.godpalace.godbox.ui.BoxComboBox;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
 import com.godpalace.godbox.util.AntiMostTopUtil;
-import com.sun.jna.Pointer;
-import com.sun.jna.platform.win32.User32;
-import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinUser;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.godpalace.godbox.util.CharToStringUtil.charToString;
 
 @Getter
 public class AntiMostTop implements Module {
@@ -60,4 +53,7 @@ public class AntiMostTop implements Module {
         antiMostTopUtil.setReMostTop(isReMostTop);
         antiMostTopUtil.stop();
     }
+
+    @Override
+    public void init() {}
 }

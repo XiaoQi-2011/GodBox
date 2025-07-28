@@ -8,6 +8,7 @@ import com.godpalace.godbox.ui.BoxShowPanel;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
 import com.godpalace.godbox.util.AntiMostTopUtil;
 import com.godpalace.godbox.util.DialogUtil;
+import com.godpalace.godbox.util.FileReleaseUtil;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
@@ -46,7 +47,7 @@ public class AntiScreenshot implements Module {
             new ModuleArg("获取所有窗口名称", "show", "", "", "", ""),
     };
 
-    private static final String exePath;
+    private static String exePath;
     private String[] screenNames = null;
     private final Vector<String> windows = new Vector<>();
 
@@ -66,47 +67,12 @@ public class AntiScreenshot implements Module {
             return true;
         }
     }
-    static {
-        File exe = new File(System.getenv("TEMP"), "NotCaptureCmd.exe");
-        URL exeUrl = AntiMostTopUtil.class.getResource("/NotCaptureCmd.exe");
-
-        if (exeUrl != null && !exe.exists()) {
-            try {
-                InputStream in = exeUrl.openStream();
-                FileOutputStream out = new FileOutputStream(exe);
-
-                byte[] buffer = new byte[10240];
-                int len;
-                while ((len = in.read(buffer)) != -1) {
-                    out.write(buffer, 0, len);
-                }
-
-                in.close();
-                out.close();
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to load NotCaptureCmd.exe", e);
-            }
-        }
-
-        exePath = exe.getAbsolutePath();
-    }
 
     @Override
     public void Enable() {
         enabled = true;
-        BoxShowPanel showPanel = (BoxShowPanel) args[2].getComponent();
-        showPanel.getButton().addActionListener(e -> {
-            Pointer pointer = Pointer.createConstant(0);
-            User32.INSTANCE.EnumWindows(new WndEnumProc(), pointer);
-            StringBuilder result = new StringBuilder();
-            for (String window : windows) {
-                result.append(window).append("\n");
-            }
-            showPanel.getTextArea().setText(result.toString());
-            DialogUtil.showModuleInfo(result.toString());
-        });
-
         screenNames = args[0].getValue().toString().split("\n");
+
         for (String screenName : screenNames) {
             if (screenName.trim().isEmpty()) {
                 continue;
@@ -135,5 +101,25 @@ public class AntiScreenshot implements Module {
                 throw new RuntimeException("Failed to disable AntiScreenshot", e);
             }
         }
+    }
+
+    @Override
+    public void init() {
+        exePath = FileReleaseUtil.releaseFile("NotCaptureCmd.exe");
+
+        BoxShowPanel showPanel = (BoxShowPanel) args[2].getComponent();
+        showPanel.getTextArea().setText("");
+        showPanel.setShowType(BoxShowPanel.ShowType.DIALOG);
+        showPanel.setOnClickEvent(() -> {
+            windows.clear();
+            Pointer pointer = Pointer.createConstant(0);
+            User32.INSTANCE.EnumWindows(new WndEnumProc(), pointer);
+            StringBuilder result = new StringBuilder();
+            for (String window : windows) {
+                result.append(window).append("\n");
+            }
+            String resultStr = result.substring(0, result.length() - 1);
+            args[2].setValue(resultStr);
+        });
     }
 }
