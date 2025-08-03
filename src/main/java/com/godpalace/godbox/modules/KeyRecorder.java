@@ -122,13 +122,5 @@ public class KeyRecorder implements Module {
     }
 
     @Override
-    public void init() {
-        if (!new File(args[0].getValue().toString()).exists()) {
-            try {
-                new File(args[0].getValue().toString()).createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+    public void init() {}
 }

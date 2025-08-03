@@ -15,7 +15,7 @@ public class ModuleMgr {
     @Getter
     private static final List<Module> modules = new ArrayList<>();
     private static final ModuleConfigMgr moduleConfigMgr = new ModuleConfigMgr();
-    private static final String CONFIG_FILE_PATH = "config.json";
+    private static final String CONFIG_FILE_PATH = "./config.json";
 
     static {
         Runtime.getRuntime().addShutdownHook(new Thread(moduleConfigMgr::save));

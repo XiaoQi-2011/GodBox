@@ -12,6 +12,7 @@ import com.godpalace.godbox.util.DialogUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.nio.file.Files;
@@ -29,6 +30,8 @@ public class Main {
 
     @Getter
     private static final BackgroundFrame settings = new BackgroundFrame();
+
+    private static TrayIcon trayIcon;
 
     static {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -109,6 +112,36 @@ public class Main {
             log.info("GodBox started successfully");
         } catch (Exception e) {
             log.error("Error initializing GodBox", e);
+        }
+
+        // 创建托盘图标
+        if (SystemTray.isSupported()) {
+            SystemTray tray = SystemTray.getSystemTray();
+            Image image = Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/texture.png"));
+
+            PopupMenu popupMenu = new PopupMenu();
+            MenuItem showItem = new MenuItem("显示UI");
+            showItem.addActionListener(e -> {
+                ui.setVisible(true);
+            });
+            popupMenu.add(showItem);
+            MenuItem exitItem = new MenuItem("退出");
+            exitItem.addActionListener(e -> {
+                System.exit(0);
+            });
+            popupMenu.add(exitItem);
+
+            trayIcon = new TrayIcon(image, "GodBox by XiaoQi", popupMenu);
+            trayIcon.setImageAutoSize(true);
+            trayIcon.addActionListener(e -> {
+                ui.setVisible(true);
+            });
+
+            try {
+                tray.add(trayIcon);
+            } catch (AWTException e) {
+                log.error("Error adding tray icon", e);
+            }
         }
     }
 }
