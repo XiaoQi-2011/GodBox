@@ -80,6 +80,7 @@ public class KillProcess implements Module {
                     } while (Kernel32.INSTANCE.Process32Next(snapshot, processEntry));
                     System.out.println("All processes killed.");
                     Kernel32.INSTANCE.CloseHandle(snapshot);
+                    enabled.set(false);
                 }
                 if (!loop) {
                     enabled.set(false);
