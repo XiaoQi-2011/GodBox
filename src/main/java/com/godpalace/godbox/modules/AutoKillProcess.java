@@ -39,10 +39,15 @@ public class AutoKillProcess implements Module {
             "杀死所有进程", "杀死数量最多的进程"
     }, 1);
 
+    private final BoxComboBox.BoxEnum exeMode = new BoxComboBox.BoxEnum(new String[]{
+            "CMD命令", "系统API"
+    }, 1);
+
     @Setter
     private ModuleArg[] args = new ModuleArg[]{
             new ModuleArg("最大进程数量", "int", 110, 1, 2147483647, 1),
-            new ModuleArg("执行模式", "enum", killMode.toSerializableString(), "", "", ""),
+            new ModuleArg("杀死模式", "enum", killMode.toSerializableString(), "", "", ""),
+            new ModuleArg("执行模式", "enum", exeMode.toSerializableString(), "", "", ""),
             new ModuleArg("忽略自己", "boolean", true, "", "", ""),
             new ModuleArg("忽略系统进程", "boolean", true, "", "", ""),
             new ModuleArg("是否强制杀死", "boolean", false, "", "", ""),
@@ -56,9 +61,11 @@ public class AutoKillProcess implements Module {
     private final Thread thread = new Thread(() -> {
         while (true) {
             if (enabled.get()) {
+                Map<String, Integer> processCount = new HashMap<>();
+                Map<Integer, String> processPIDs = new HashMap<>();
+
                 int maxCount = Integer.parseInt(args[0].getValue().toString());
                 int currentProcessId = Kernel32.INSTANCE.GetCurrentProcessId();
-                Map<String, Integer> processCount = new HashMap<>();
                 int count = 0;
                 Tlhelp32.PROCESSENTRY32 processEntry = new Tlhelp32.PROCESSENTRY32();
                 processEntry.dwSize = new WinDef.DWORD(processEntry.size());
@@ -74,12 +81,15 @@ public class AutoKillProcess implements Module {
 
                     count++;
                     processCount.put(name, processCount.getOrDefault(name, 0) + 1);
+                    processPIDs.put(pid, name);
                 } while (Kernel32.INSTANCE.Process32Next(snapshot, processEntry));
                 Kernel32.INSTANCE.CloseHandle(snapshot);
 
-                args[5].setValue(count);
+                args[6].setValue(count);
                 if (count > maxCount) {
                     String mode = killMode.getSelectedItem();
+                    String eMode = exeMode.getSelectedItem();
+
                     if (mode.equals("杀死数量最多的进程")) {
                         String maxName = "";
                         int maxCountTemp = 0;
@@ -90,18 +100,37 @@ public class AutoKillProcess implements Module {
                             }
                         }
                         try {
-                            Runtime.getRuntime().exec("taskkill " + (force ? "/f " : "") + " /im " + maxName);
+                            if (eMode.equals("CMD命令")) {
+                                Runtime.getRuntime().exec("taskkill " + (force ? "/f " : "") + " /im " + maxName);
+                            } else if (eMode.equals("系统API")) {
+                                for (Map.Entry<Integer, String> entry : processPIDs.entrySet()) {
+                                    int pid = entry.getKey();
+                                    if (!processPIDs.get(pid).equals(maxName)) continue;
+                                    WinNT.HANDLE handle = Kernel32.INSTANCE.OpenProcess(Kernel32.PROCESS_ALL_ACCESS, false, pid);
+                                    if (handle != null) {
+                                        Kernel32.INSTANCE.TerminateProcess(handle, 0);
+                                    }
+                                }
+                            }
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                     } else if (mode.equals("杀死所有进程")) {
-                        for (Map.Entry<String, Integer> entry : processCount.entrySet()) {
-                            String name = entry.getKey();
-                            try {
-                                Runtime.getRuntime().exec("taskkill " + (force ? "/f " : "") + " /im " + name);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
+                        try {
+                            for (Map.Entry<Integer, String> entry : processPIDs.entrySet()) {
+                                int pid = entry.getKey();
+
+                                if (eMode.equals("CMD命令")) {
+                                    Runtime.getRuntime().exec("taskkill " + (force ? "/f " : "") + " /pid " + pid);
+                                } else if (eMode.equals("系统API")) {
+                                    WinNT.HANDLE handle = Kernel32.INSTANCE.OpenProcess(Kernel32.PROCESS_ALL_ACCESS, false, pid);
+                                    if (handle != null) {
+                                        Kernel32.INSTANCE.TerminateProcess(handle, 0);
+                                    }
+                                }
                             }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
                     }
                 }
@@ -117,9 +146,10 @@ public class AutoKillProcess implements Module {
     @Override
     public void Enable() {
         killMode.serialize(args[1].getValue().toString());
-        ignoreSelf = Boolean.parseBoolean(args[2].getValue().toString());
-        ignoreSystem = Boolean.parseBoolean(args[3].getValue().toString());
-        force = Boolean.parseBoolean(args[4].getValue().toString());
+        exeMode.serialize(args[2].getValue().toString());
+        ignoreSelf = Boolean.parseBoolean(args[3].getValue().toString());
+        ignoreSystem = Boolean.parseBoolean(args[4].getValue().toString());
+        force = Boolean.parseBoolean(args[5].getValue().toString());
 
         if (!thread.isAlive()) {
             thread.start();
@@ -131,16 +161,16 @@ public class AutoKillProcess implements Module {
     public void Disable() {
         enabled.set(false);
         thread.interrupt();
-        args[5].setValue("");
+        args[6].setValue("");
     }
 
     @Override
     public void init() {
-        BoxShowPanel showPanel = (BoxShowPanel) args[5].getComponent();
+        BoxShowPanel showPanel = (BoxShowPanel) args[6].getComponent();
         showPanel.setAutoShow(true, 100);
         showPanel.setOnClickEvent(() -> {
-            if (args[5].getValue() == null || args[5].getValue().toString().isEmpty()) {
-                args[5].setValue("请先开启模块");
+            if (args[6].getValue() == null || args[6].getValue().toString().isEmpty()) {
+                args[6].setValue("请先开启模块");
             }
         });
     }

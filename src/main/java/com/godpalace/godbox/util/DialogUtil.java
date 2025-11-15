@@ -1,9 +1,11 @@
 package com.godpalace.godbox.util;
 
+import com.godpalace.godbox.Main;
 import com.godpalace.godbox.UiSettings;
 import com.godpalace.godbox.ui.BoxButton;
 import com.godpalace.godbox.ui.BoxLabel;
 import com.godpalace.godbox.ui.BoxPanel;
+import com.godpalace.godbox.ui.ModuleSettingsPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -57,8 +59,7 @@ public final class DialogUtil {
                         synchronized (frame) {
                             frame.notifyAll();
                         }
-                    } catch (Exception ignored) {
-                    }
+                    } catch (Exception ignored) {}
                 }
             }).start();
 
@@ -119,6 +120,29 @@ public final class DialogUtil {
             textArea.setEditable(false);
             textArea.setFont(UiSettings.font);
             frame.add(textArea, BorderLayout.CENTER);
+            frame.setFocusable(true);
+
+            textArea.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                        frame.dispose();
+                        synchronized (frame) {
+                            frame.notifyAll();
+                        }
+                    }
+                }
+            });
+            frame.addMouseWheelListener(e -> {
+                int rotation = e.getWheelRotation();
+                int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+                if (rotation < 0 && frame.getY() < 0) {
+                    frame.setLocation(frame.getX(), frame.getY() + 20);
+                }
+                if (rotation > 0 && frame.getY() + frame.getHeight() > screenHeight) {
+                    frame.setLocation(frame.getX(), frame.getY() - 20);
+                }
+            });
 
             frame.setVisible(true);
             synchronized (frame) {
