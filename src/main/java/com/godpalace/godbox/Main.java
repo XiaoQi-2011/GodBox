@@ -120,12 +120,12 @@ public class Main {
             Image image = Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/texture.png"));
 
             PopupMenu popupMenu = new PopupMenu();
-            MenuItem showItem = new MenuItem("显示UI");
+            MenuItem showItem = new MenuItem("Show UI");
             showItem.addActionListener(e -> {
                 ui.setVisible(true);
             });
             popupMenu.add(showItem);
-            MenuItem exitItem = new MenuItem("退出");
+            MenuItem exitItem = new MenuItem("Exit");
             exitItem.addActionListener(e -> {
                 System.exit(0);
             });

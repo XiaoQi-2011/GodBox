@@ -75,14 +75,12 @@ public class AutoReceivePacket implements Module {
                         outputStream.close();
                     } else if (modeStr.equals("UDP")) {
                         // UDP
-                        System.out.println("Start UDP receive");
                         DatagramSocket socket = new DatagramSocket(port);
                         socket.setSoTimeout(1000);
 
                         byte[] buffer = new byte[bufferSize];
                         DatagramPacket packet = new DatagramPacket(buffer, 0, buffer.length);
                         socket.receive(packet);
-                        System.out.println("Received data: " + Arrays.toString(packet.getData()));
                         String data = new String(packet.getData(), 0, packet.getLength());
 
                         args[4].setValue(data);
