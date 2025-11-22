@@ -138,7 +138,7 @@ public class KillProcess implements Module {
     @Override
     public void Enable() {
         killAll = Boolean.parseBoolean(args[1].getValue().toString());
-        exeMode.setSelectedItem(args[2].getValue().toString());
+        exeMode.serialize(args[2].getValue().toString());
         ignoreSelf = Boolean.parseBoolean(args[3].getValue().toString());
         ignoreSystem = Boolean.parseBoolean(args[4].getValue().toString());
         loop = Boolean.parseBoolean(args[5].getValue().toString());

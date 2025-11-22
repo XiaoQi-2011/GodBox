@@ -33,7 +33,7 @@ public class CmdExecutor implements Module {
 
     private boolean loop = true;
 
-    Thread thread = new Thread(() -> {
+    private final Thread thread = new Thread(() -> {
         while (true) {
             if (enabled.get()) {
                 String[] cmds = args[0].getValue().toString().split("\n");
