@@ -4,6 +4,7 @@ import com.godpalace.godbox.Main;
 import com.godpalace.godbox.UiSettings;
 import com.godpalace.godbox.module_mgr.Module;
 import com.godpalace.godbox.module_mgr.ModuleArg;
+import com.godpalace.godbox.ui.box_ui.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -469,7 +470,7 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
     public void mouseMoved(MouseEvent e) {
     }
 
-    static class CloseKeyListener extends KeyAdapter {
+    public static class CloseKeyListener extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

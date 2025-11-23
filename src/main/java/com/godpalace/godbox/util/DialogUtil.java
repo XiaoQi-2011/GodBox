@@ -1,11 +1,8 @@
 package com.godpalace.godbox.util;
 
-import com.godpalace.godbox.Main;
 import com.godpalace.godbox.UiSettings;
-import com.godpalace.godbox.ui.BoxButton;
-import com.godpalace.godbox.ui.BoxLabel;
-import com.godpalace.godbox.ui.BoxPanel;
-import com.godpalace.godbox.ui.ModuleSettingsPanel;
+import com.godpalace.godbox.ui.box_ui.BoxButton;
+import com.godpalace.godbox.ui.box_ui.BoxPanel;
 
 import javax.swing.*;
 import java.awt.*;

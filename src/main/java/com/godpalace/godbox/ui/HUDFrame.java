@@ -3,6 +3,7 @@ package com.godpalace.godbox.ui;
 import com.godpalace.godbox.UiSettings;
 import com.godpalace.godbox.mgr.ModuleMgr;
 import com.godpalace.godbox.module_mgr.Module;
+import com.godpalace.godbox.ui.box_ui.BoxLabel;
 import lombok.Setter;
 
 import javax.swing.*;

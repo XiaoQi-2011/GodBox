@@ -1,4 +1,4 @@
-import com.godpalace.godbox.ui.BoxButton;
+import com.godpalace.godbox.ui.box_ui.BoxButton;
 
 import javax.swing.*;
 import java.awt.*;
