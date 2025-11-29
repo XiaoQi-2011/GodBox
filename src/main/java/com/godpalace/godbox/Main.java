@@ -98,7 +98,10 @@ public class Main {
                 @Override
                 public void nativeKeyReleased(NativeKeyEvent nativeEvent) {
                     // 右Shift键打开UI
-                    if (nativeEvent.getKeyCode() == UiSettings.openUiKey && !ui.isVisible() && !settings.isVisible()) {
+                    if (nativeEvent.getKeyCode() == UiSettings.openUiKey
+                            && !ui.isVisible()
+                            && !settings.isVisible()
+                            && UiSettings.MainUIEnabled) {
                         ui.setVisible(true);
                     }
                 }

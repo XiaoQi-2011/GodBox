@@ -14,21 +14,46 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class HUDFrame extends JFrame {
     @Setter
     private Location location;
-    private final Vector<BoxLabel> labels = new Vector<>();
-    private int maxWidth = 0;
-    private int totalHeight = 0;
+    private final Vector<String> names = new Vector<>();
+    private int xOffset = 0;
+    private int yOffset = 0;
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
 
-    public HUDFrame() {
+    private final JPanel contentPanel = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(getBackground());
+            g.fillRect(0, 0, getWidth(), getHeight());
 
-        setLayout(null);
+            g.setColor(getForeground());
+            g.drawLine(0, 0, getWidth(), 0);
+            int x = 0, y = 0;
+            for (String name : names) {
+                int width = Toolkit.getDefaultToolkit().getFontMetrics(UiSettings.font).stringWidth(name);
+                int height = Toolkit.getDefaultToolkit().getFontMetrics(UiSettings.font).getHeight();
+                x = (location == Location.LEFT ? 0 : getWidth() - width);
+                y += height;
+                g.setFont(UiSettings.font);
+                g.drawString(name, x, y);
+            }
+        }
+    };
+
+    public HUDFrame() {
+        Color background = new Color(0, 0, 0, 0);
         setAlwaysOnTop(true);
         setType(JFrame.Type.UTILITY);
+        setLocationRelativeTo(null);
         setResizable(false);
         setUndecorated(true);
-        setBackground(new Color(0, 0, 0, 0));
+        setBackground(background);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        setFocusable(true);
+
+        contentPanel.setBackground(background);
+        contentPanel.setForeground(UiSettings.themeColor);
+        contentPanel.setFont(UiSettings.font);
+        setContentPane(contentPanel);
     }
 
     private final Thread updateThread = new Thread(() -> {
@@ -36,8 +61,8 @@ public class HUDFrame extends JFrame {
             if (isRunning.get()) {
                 try {
                     Thread.sleep(100);
-                    loadModules();
-                    updateUI();
+                    update();
+                    repaint();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -58,35 +83,30 @@ public class HUDFrame extends JFrame {
         setVisible(false);
     }
 
-    private void loadModules() {
-        maxWidth = 0;
-        totalHeight = 0;
-        labels.clear();
+    public void setOffset(int xOffset, int yOffset) {
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
+    }
+
+    private void update() {
+        int maxWidth = 0;
+        int totalHeight = 0;
+        names.clear();
         for (Module module : ModuleMgr.getModules()) {
             if (module.isEnabled()) {
                 String name = module.getDisplayName();
-                int alignment = (location == Location.LEFT ? SwingConstants.LEFT : SwingConstants.RIGHT);
                 int width = Toolkit.getDefaultToolkit().getFontMetrics(UiSettings.font).stringWidth(name);
                 int height = Toolkit.getDefaultToolkit().getFontMetrics(UiSettings.font).getHeight();
-                BoxLabel label = new BoxLabel(name, alignment);
+
                 maxWidth = Math.max(maxWidth, width);
                 totalHeight += height;
-                labels.add(label);
+                names.add(name);
             }
         }
-    }
-
-    private void updateUI() {
-        int size = labels.size();
-        setSize(maxWidth, totalHeight);
         int x = (location == Location.LEFT? 0 : Toolkit.getDefaultToolkit().getScreenSize().width - getWidth());
         int y = (Toolkit.getDefaultToolkit().getScreenSize().height - getHeight()) / 2;
-        setLocation(x, y);
-        for (int i = 0; i < size; i++) {
-            BoxLabel label = labels.get(i);
-            label.setBounds(0, i * label.getHeight(), maxWidth, label.getHeight());
-            add(label);
-        }
+        setSize(maxWidth + 5, totalHeight + 5);
+        setLocation(x + xOffset, y + yOffset);
     }
 
     public enum Location {

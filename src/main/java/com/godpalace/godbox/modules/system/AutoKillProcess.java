@@ -6,7 +6,7 @@ import com.godpalace.godbox.module_mgr.ModuleArg;
 import com.godpalace.godbox.ui.box_ui.BoxComboBox;
 import com.godpalace.godbox.ui.box_ui.BoxShowPanel;
 import com.godpalace.godbox.ui.ModuleSettingsPanel;
-import com.godpalace.godbox.util.CharToStringUtil;
+import com.godpalace.godbox.util.StringUtil;
 import com.sun.jna.platform.win32.Kernel32;
 import com.sun.jna.platform.win32.Tlhelp32;
 import com.sun.jna.platform.win32.WinDef;
@@ -74,7 +74,7 @@ public class AutoKillProcess implements Module {
                 Kernel32.INSTANCE.Process32First(snapshot, processEntry);
                 do {
                     int pid = processEntry.th32ProcessID.intValue();
-                    String name = CharToStringUtil.charToString(processEntry.szExeFile);
+                    String name = StringUtil.charToString(processEntry.szExeFile);
 
                     if (ignoreSelf && pid == currentProcessId) continue;
                     if (pid <= 1000 || name.equals("svchost.exe") && ignoreSystem) continue;

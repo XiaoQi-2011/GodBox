@@ -5,6 +5,7 @@ import com.godpalace.godbox.UiSettings;
 import com.godpalace.godbox.module_mgr.Module;
 import com.godpalace.godbox.module_mgr.ModuleArg;
 import com.godpalace.godbox.ui.box_ui.*;
+import com.godpalace.godbox.util.StringUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -179,7 +180,14 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                     spinner.setEditor(editor);
 
                     // 监听输入
-                    editor.getTextField().addActionListener(e -> arg.setValue(Integer.parseInt(editor.getTextField().getText())));
+                    editor.getTextField().addCaretListener(e -> {
+                        String text = editor.getTextField().getText();
+                        if (text != null && !text.isEmpty()) {
+                             try {
+                                 spinner.setValue(StringUtil.getNumber(text));
+                             } catch (Exception ignored) {}
+                        }
+                    });
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {
@@ -203,7 +211,14 @@ public class ModuleSettingsPanel extends BoxPanel implements MouseListener, Mous
                     spinner.setEditor(editor);
 
                     // 监听输入
-                    editor.getTextField().addActionListener(e -> arg.setValue(Long.parseLong(editor.getTextField().getText())));
+                    editor.getTextField().addCaretListener(e -> {
+                        String text = editor.getTextField().getText();
+                        if (text != null && !text.isEmpty()) {
+                            try {
+                                spinner.setValue(StringUtil.getNumber(text));
+                            } catch (Exception ignored) {}
+                        }
+                    });
                     editor.getTextField().addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusLost(FocusEvent e) {

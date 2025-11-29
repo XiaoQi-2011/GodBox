@@ -14,7 +14,7 @@ import lombok.Setter;
 
 import java.util.Vector;
 
-import static com.godpalace.godbox.util.CharToStringUtil.charToString;
+import static com.godpalace.godbox.util.StringUtil.charToString;
 
 @Getter
 public class AntiScreenshot implements Module {

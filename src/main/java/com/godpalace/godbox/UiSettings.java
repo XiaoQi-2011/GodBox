@@ -29,6 +29,9 @@ public class UiSettings {
     public static boolean keyBindEnabled = true;
 
     @Data
+    public static boolean MainUIEnabled = true;
+
+    @Data
     public static boolean moduleInfoEnabled = false;
 
     public static void initialize() {

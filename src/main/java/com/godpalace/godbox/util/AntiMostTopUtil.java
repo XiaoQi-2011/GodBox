@@ -15,7 +15,7 @@ import java.net.URL;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.godpalace.godbox.util.CharToStringUtil.charToString;
+import static com.godpalace.godbox.util.StringUtil.charToString;
 
 public class AntiMostTopUtil {
     private final AtomicBoolean enabled = new AtomicBoolean(false);

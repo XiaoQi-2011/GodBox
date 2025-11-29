@@ -33,6 +33,8 @@ public class HUD implements Module {
     @Setter
     private ModuleArg[] args = new ModuleArg[]{
             new ModuleArg("显示位置", "enum", location.toSerializableString(), "", "", ""),
+            new ModuleArg("X轴偏移", "int", 0, -2147483648, 2147483647, 1),
+            new ModuleArg("Y轴偏移", "int", -450, -2147483648, 2147483647, 1)
     };
 
     private final HUDFrame frame = new HUDFrame();
@@ -48,6 +50,9 @@ public class HUD implements Module {
         location.serialize(args[0].getValue().toString());
         String locationStr = location.getSelectedItem();
         HUDFrame.Location loc = locationStr.equals("左侧")? HUDFrame.Location.LEFT : HUDFrame.Location.RIGHT;
+        int xOffset = Integer.parseInt(args[1].getValue().toString());
+        int yOffset = Integer.parseInt(args[2].getValue().toString());
+        frame.setOffset(xOffset, yOffset);
         frame.setLocation(loc);
         frame.start();
     }
